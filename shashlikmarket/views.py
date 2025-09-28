@@ -7,43 +7,51 @@ def home(request):
 
 def menu(request):
     products = Products.objects.order_by('id')
+    active_category = 'all'
     context = {'products': products}
-    return render(request, 'menu.html', context)
+    return render(request, 'menu.html', context, {'active_category': active_category})
 
 def shashlik(request):
     shashliks = Products.objects.filter(category__exact = 'meat')
+    active_category = 'meat'
     context = {'shashliks': shashliks}
-    return render(request, 'menu/shashlik.html', context)
+    return render(request, 'menu/shashlik.html', context, {'active_category': active_category})
 
 def kebab(request):
     kebab = Products.objects.filter(category__exact = 'kebab')
+    active_category = 'kebab'
     context = {'kebabs': kebab}
-    return render(request, 'menu/kebab.html', context)
+    return render(request, 'menu/kebab.html', context, {'active_category': active_category})
 
 def sets(request):
     sets = Products.objects.filter(category__exact = 'set')
+    active_category = 'sets'
     context = {'sets': sets}
-    return render(request, 'menu/set.html', context)
+    return render(request, 'menu/set.html', context, {'active_category': active_category})
 
 def garnir(request):
     garnir = Products.objects.filter(category__exact = 'garnish')
+    active_category = 'garnirs'
     context = {'garnirs': garnir}
-    return render(request, 'menu/garnir.html', context)
+    return render(request, 'menu/garnir.html', context, {'active_category': active_category})
 
 def fish(request):
     fish = Products.objects.filter(category__exact = 'fish')
+    active_category = 'fishes'
     context = {'fishes': fish}
-    return render(request, 'menu/fish.html', context)
+    return render(request, 'menu/fish.html', context, {'active_category': active_category})
 
 def drinks(request):
     drinks = Products.objects.filter(category__exact = 'drinks')
+    active_category = 'drinks'
     context = {'drinks': drinks}
-    return render(request, 'menu/drinks.html', context)
+    return render(request, 'menu/drinks.html', context, {'active_category': active_category})
 
 def souces(request):
     souces = Products.objects.filter(category__exact = 'sauce')
+    active_category = 'souces'
     context = {'souces': souces}
-    return render(request, 'menu/souces.html', context)
+    return render(request, 'menu/souces.html', context, {'active_category': active_category})
 
 
 #добавление
@@ -91,7 +99,6 @@ def remove_quantity(request, product_id):
 #корзина
 def cart_detail(request):
     cart = get_cart(request)
-    print(cart)
     items = []
     total = 0
     
@@ -112,9 +119,7 @@ def cart_detail(request):
             'imagepath': item.get('imagepath')
         })
 
-        print(items)
-
-    return render(request, 'cart.html', {'items': items,'total': total})  
+        return render(request, 'cart.html', {'items': items,'total': total})  
 
 
 def orders(request):
