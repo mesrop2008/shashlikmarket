@@ -1,120 +1,130 @@
 <!DOCTYPE html>
-<html lang="en">
-
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+<html lang="ru">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Меню</title>
     <script src="https://cdn.tailwindcss.com"></script>
-</head>
+  </head>
 
-<body>
-    {% extends "layout.html" %}
+  <body>
+    {% extends 'layout.html' %}
     {% load static %}
     {% block content %}
-    <div class="max-w-7xl mx-auto px-4 py-12">
-        <!-- Header -->
+      <div class="max-w-7xl mx-auto px-4 py-12">
+        <!-- Заголовок -->
         <div class="text-center mb-12">
-            <h1 class="text-4xl font-bold text-gray-900 mb-4">Наше меню</h1>
-            <p class="text-xl text-gray-600 max-w-2xl mx-auto">
-                Выберите лучшие шашлыки, приготовленные на настоящих углях из отборного мяса
-            </p>
+          <h1 class="text-4xl font-bold text-gray-900 mb-4">Наше меню</h1>
+          <p class="text-xl text-gray-600 max-w-2xl mx-auto">Выберите лучшие шашлыки, приготовленные на настоящих углях из отборного мяса</p>
         </div>
 
-        <!-- Categories -->
+        <!-- Категории -->
         <div class="grid grid-cols-2 md:grid-cols-8 gap-2 mb-8 text-center">
-    <a href="{% url 'menu' %}"
-       class="py-2 px-4 rounded-lg font-semibold inline-block {% if active_category == 'all' %}bg-orange-100{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-        🍽️ Всё меню
-    </a>
-    <a href="{% url 'shashlik' %}"
-       class="py-2 px-4 rounded-lg inline-block {% if active_category == 'meat' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-        🍖 Шашлыки
-    </a>
-    <a href="{% url 'kebab' %}"
-       class="py-2 px-4 rounded-lg inline-block {% if active_category == 'kebab' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-        🍢 Люля-кебаб
-    </a>
-    <a href="{% url 'sets' %}"
-       class="py-2 px-4 rounded-lg inline-block {% if active_category == 'sets' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-        🥗 Сеты
-    </a>
-    <a href="{% url 'garnirs' %}"
-       class="py-2 px-4 rounded-lg inline-block {% if active_category == 'garnirs' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-        🍚 Гарниры
-    </a>
-    <a href="{% url 'fishes' %}"
-       class="py-2 px-4 rounded-lg inline-block {% if active_category == 'fishes' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-        🐟 Рыба
-    </a>
-    <a href="{% url 'drinks' %}"
-       class="py-2 px-4 rounded-lg inline-block {% if active_category == 'drinks' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-        🥤 Напитки
-    </a>
-    <a href="{% url 'souces' %}"
-       class="py-2 px-4 rounded-lg inline-block {% if active_category == 'souces' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-        🧂 Соусы
-    </a>
-</div>
+          <a href="{% url 'menu' %}"
+            class="py-2 px-4 rounded-lg font-semibold inline-block {% if active_category == 'all' %}
+              bg-orange-100
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+            🍽️ Всё меню
+          </a>
+          <a href="{% url 'shashlik' %}"
+            class="py-2 px-4 rounded-lg inline-block {% if active_category == 'meat' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+            🍖 Шашлыки
+          </a>
+          <a href="{% url 'kebab' %}"
+            class="py-2 px-4 rounded-lg inline-block {% if active_category == 'kebab' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+            🍢 Люля-кебаб
+          </a>
+          <a href="{% url 'sets' %}"
+            class="py-2 px-4 rounded-lg inline-block {% if active_category == 'sets' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+            🥗 Сеты
+          </a>
+          <a href="{% url 'garnirs' %}"
+            class="py-2 px-4 rounded-lg inline-block {% if active_category == 'garnirs' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+            🍚 Гарниры
+          </a>
+          <a href="{% url 'fishes' %}"
+            class="py-2 px-4 rounded-lg inline-block {% if active_category == 'fishes' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+            🐟 Рыба
+          </a>
+          <a href="{% url 'drinks' %}"
+            class="py-2 px-4 rounded-lg inline-block {% if active_category == 'drinks' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+            🥤 Напитки
+          </a>
+          <a href="{% url 'souces' %}"
+            class="py-2 px-4 rounded-lg inline-block {% if active_category == 'souces' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+            🧂 Соусы
+          </a>
+        </div>
 
-
-
-        <!-- Menu Items Grid -->
-        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
-            <!-- Card example -->
+        <!-- Сетка товаров -->
+        {% if products %}
+          <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             {% for product in products %}
-            <div
-                class="group hover:shadow-xl transition-all duration-300 overflow-hidden border-0 shadow-lg rounded-lg">
+              <div class="group hover:shadow-xl transition-all duration-300 overflow-hidden border-0 shadow-lg rounded-lg">
                 <div class="relative overflow-hidden">
-                    <img src="{% static product.imagepath %}"
-                        class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300">
-                    <div class="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1 rounded-full font-semibold">
-                        {{ product.price }}₽
-                    </div>
+                  <img src="{{ product.image.url }}?f_auto,q_auto,w_300,h_300,c_fill,g_auto" alt="{{ product.name }}" loading="lazy" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300" />
+                  <div class="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1 rounded-full font-semibold">{{ product.price }}₽</div>
                 </div>
 
                 <div class="p-6">
-                    <div class="flex items-start justify-between mb-2">
-                        <h3 class="text-xl font-bold text-gray-900">{{ product.name }}</h3>
-                        <span class="px-2 py-1 text-sm bg-gray-100 rounded">{{ product.weight }}г</span>
+                  <div class="flex items-start justify-between mb-2">
+                    <h3 class="text-xl font-bold text-gray-900">{{ product.name }}</h3>
+                    <span class="px-2 py-1 text-sm bg-gray-100 rounded">{{ product.weight }}г</span>
+                  </div>
+
+                  <p class="text-gray-600 mb-4 leading-relaxed">{{ product.description }}</p>
+
+                  <div class="flex items-center justify-between mb-4">
+                    <div class="flex items-center gap-1 text-orange-400">
+                      ★★★★★ <span class="text-gray-500 ml-1">(4.8)</span>
                     </div>
+                    <div class="flex items-center gap-1 text-sm text-gray-500">🕒 25–30 мин</div>
+                  </div>
 
-                    <p class="text-gray-600 mb-4 leading-relaxed">
-                        {{ product.description }}
-                    </p>
-
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-1 text-orange-400">
-                            ★★★★★ <span class="text-gray-500 ml-1">(4.8)</span>
-                        </div>
-                        <div class="flex items-center gap-1 text-sm text-gray-500">
-                            🕒 25-30 мин
-                        </div>
-                    </div>
-
-                    <a href="{% url 'add_to_cart' product.id %}"
-                        class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-4 py-2 rounded text-center block">
-                        Добавить в корзину
-                    </a>
-
+                  <a href="{% url 'add_to_cart' product.id %}" class="w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-4 py-2 rounded text-center block">Добавить в корзину</a>
                 </div>
-            </div>
+              </div>
             {% endfor %}
-            <!-- Повторяем карточки для других блюд -->
-
-
-            <!-- Добавьте столько карточек, сколько нужно -->
-        </div>
-
-        <!-- Empty state example -->
-        <!-- <div class="text-center py-12 col-span-full">
+          </div>
+        {% else %}
+          <!-- Если товаров нет -->
+          <div class="text-center py-12 col-span-full">
             <div class="text-6xl mb-4">🍽️</div>
             <h3 class="text-xl font-semibold text-gray-900 mb-2">В этой категории пока нет блюд</h3>
             <p class="text-gray-600">Мы работаем над расширением меню. Следите за обновлениями!</p>
-        </div>
-    </div> -->
-        {% endblock %}
-
-</body>
-
+          </div>
+        {% endif %}
+      </div>
+    {% endblock %}
+  </body>
 </html>

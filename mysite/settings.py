@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/5.2/ref/settings/
 """
 
 from pathlib import Path
+import cloudinary
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -38,6 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'shashlikmarket', 
+    'cloudinary',
+    'cloudinary_storage'
 ]
 
 MIDDLEWARE = [
@@ -62,6 +65,8 @@ TEMPLATES = [
                 'django.template.context_processors.request',
                 'django.contrib.auth.context_processors.auth',
                 'django.contrib.messages.context_processors.messages',
+                'shashlikmarket.context_processors.menu_urls',
+                'shashlikmarket.context_processors.cart_context'
             ],
         },
     },
@@ -87,6 +92,19 @@ DATABASES = {
     }
 }
 
+CLOUDINARY_STORAGE = {
+    "CLOUD_NAME": "dmalvpww4",
+    "API_KEY": "438996874724135",
+    "API_SECRET": "am_CTbTXFJeAmk_RMO_4DiaG8Qk",
+}
+
+cloudinary.config( 
+  cloud_name = "dmalvpww4", 
+  api_key = "438996874724135", 
+  api_secret = "am_CTbTXFJeAmk_RMO_4DiaG8Qk"
+)
+
+DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
 
 
@@ -112,14 +130,21 @@ AUTH_PASSWORD_VALIDATORS = [
 # Internationalization
 # https://docs.djangoproject.com/en/5.2/topics/i18n/
 
-LANGUAGE_CODE = 'en-us'
+# Настройки языка и времени
+LANGUAGE_CODE = 'ru-ru'  
+TIME_ZONE = 'Asia/Irkutsk'  
+USE_I18N = True  
+USE_L10N = True  
+USE_TZ = True 
 
-TIME_ZONE = 'UTC'
+# Форматы дат
+DATE_FORMAT = 'd.m.Y'  # 15.01.2024
+DATETIME_FORMAT = 'd.m.Y H:i'  # 15.01.2024 14:30
+SHORT_DATE_FORMAT = 'd.m.Y'  # 15.01.2024
+SHORT_DATETIME_FORMAT = 'd.m.Y H:i'  # 15.01.2024 14:30
 
-USE_I18N = True
-
-USE_TZ = True
-
+# Месяцы и дни на русском
+FIRST_DAY_OF_WEEK = 1  # Понедельник - первый день недели
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/5.2/howto/static-files/

@@ -1,141 +1,107 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="ru">
 
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
-    <script src="https://cdn.tailwindcss.com"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Корзина - Шашлык Маркет</title>
+  <script src="https://cdn.tailwindcss.com"></script>
 </head>
 
 <body>
-    {% extends "layout.html" %}
-    {% load static %}
-    {% block content %}
-    <div class="max-w-4xl mx-auto px-4 py-12">
-        <h1 class="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
-            🛒 Корзина
-        </h1>
+  {% extends "layout.html" %}
+  {% load static %}
+  {% block content %}
+  <div class="max-w-4xl mx-auto px-4 py-12">
+    <h1 class="text-3xl font-bold text-gray-900 mb-8 flex items-center gap-3">
+      🛒 Корзина
+    </h1>
 
-
-        <!-- Если есть товары -->
-        <div class="space-y-6">
-
-            <!-- Cart Items -->
-            <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-                <div class="p-6 border-b">
-                    <h2 class="text-xl font-semibold">Ваш заказ</h2>
-                </div>
-                {% if items %}
-                {% for product in items %}
-                <div class="p-6 space-y-4">
-                    <!-- Пример товара -->
-                    <div class="flex items-center gap-4 p-4 border rounded-lg">
-                        <!-- Картинка товара -->
-                        <img src="{% static product.imagepath %}" class="w-20 h-20 object-cover rounded-lg">
-
-                        <!-- Информация о товаре -->
-                        <div class="flex-1">
-                            <h3 class="font-semibold text-gray-900">{{ product.name }}</h3>
-                            <p class="text-gray-600">{{ product.price }}₽ за порцию</p>
-                        </div>
-
-                        <!-- Количество -->
-                        <div class="flex items-center gap-2">
-                            <a href="{% url 'remove_quantity' product.product.id %}"
-                                class="px-2 py-1 bg-gray-200 rounded">-</a>
-                            <span class="w-12 text-center font-semibold">{{ product.quantity }}</span>
-                            <a href="{% url 'add_to_cart' product.product.id %}"
-                                class="px-2 py-1 bg-gray-200 rounded">+</a>
-                        </div>
-
-                        <!-- Цена и удалить -->
-                        <div class="text-right">
-                            <p class="font-semibold">{{product.subtotal}}₽</p>
-                            <a href="{% url 'remove_from_cart' product.product.id %}"
-                                class="text-red-500 hover:text-red-700">🗑️</a>
-                        </div>
-                    </div>
-
-
-                </div>
-            </div>
-            {% endfor %}
-
-            <div class="bg-white rounded-lg shadow-lg p-6">
-                <div class="flex items-center justify-between text-xl font-bold mb-6">
-                    <span>Итого:</span>
-                    <span>{{ total }}₽</span>
-                </div>
-
-                <a href="#checkout"
-                    class="w-full block text-center bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-4 py-3 rounded">
-                    Оформить заказ
-                </a>
-            </div>
+    {% if items %}
+    <div class="space-y-6">
+      <!-- Cart Items -->
+      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+        <div class="p-6 border-b border-gray-200">
+          <h2 class="text-xl font-semibold text-gray-900">Ваши товары</h2>
         </div>
-
-
-        {% else %}
-        <div class="text-center">
-            <div class="text-8xl mb-6">🛒</div>
-            <h1 class="text-3xl font-bold text-gray-900 mb-4">Корзина пуста</h1>
-            <p class="text-xl text-gray-600 mb-8">
-                Добавьте вкусные шашлыки из нашего меню
-            </p>
-            <a href="/menu"
-                class="inline-block bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-8 py-3 rounded">
-                Перейти к меню
-            </a>
-        </div>
-        {% endif %}
-        <!-- Checkout Form -->
-        <!-- <div id="checkout" class="bg-white rounded-lg shadow-lg p-6 mt-6">
-      <h2 class="text-xl font-semibold mb-4">Оформление заказа</h2>
-      <form class="space-y-6">
-        <div class="space-y-2">
-          <label for="phone" class="block font-medium">Телефон *</label>
-          <input type="tel" id="phone" placeholder="+7 (___) ___-__-__" class="w-full border px-3 py-2 rounded">
-        </div>
-        <div class="space-y-2">
-          <label for="payment" class="block font-medium">Способ оплаты</label>
-          <select id="payment" class="w-full border px-3 py-2 rounded">
-            <option value="cash">Наличными курьеру</option>
-            <option value="card">Картой курьеру</option>
-          </select>
-        </div>
-        <div class="space-y-2">
-          <label for="address" class="block font-medium">Адрес доставки *</label>
-          <input type="text" id="address" placeholder="Улица, дом, квартира" class="w-full border px-3 py-2 rounded">
-        </div>
-
         
-        <div class="bg-gray-50 p-4 rounded-lg">
-          <h3 class="font-semibold mb-2">Ваш заказ:</h3>
-          <div class="flex justify-between text-sm mb-1">
-            <span>Шашлык из баранины x 1</span>
-            <span>890₽</span>
+        <div class="p-6 space-y-4">
+          {% for product in items %}
+          <!-- Товар -->
+          <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
+            <!-- Картинка товара -->
+            <img src="{{ product.imagepath }}" alt="{{ product.name }}" 
+                 class="w-20 h-20 object-cover rounded-lg flex-shrink-0">
+
+            <!-- Информация о товаре -->
+            <div class="flex-1 min-w-0">
+              <h3 class="font-semibold text-gray-900 text-lg mb-1">{{ product.name }}</h3>
+              <p class="text-gray-600">{{ product.price }}₽ за порцию</p>
+            </div>
+
+            <!-- Управление количеством -->
+            <div class="flex items-center gap-3 bg-gray-100 rounded-lg px-3 py-2">
+              <a href="{% url 'remove_quantity' product.product.id %}" 
+                 class="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors">
+                <span class="text-lg font-bold">-</span>
+              </a>
+              <span class="w-12 text-center font-semibold text-gray-900">{{ product.quantity }}</span>
+              <a href="{% url 'add_to_cart' product.product.id %}" 
+                 class="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors">
+                <span class="text-lg font-bold">+32</span>
+              </a>
+            </div>
+
+            <!-- Цена и удаление -->
+            <div class="text-right flex flex-col items-end gap-2">
+              <p class="font-semibold text-lg text-gray-900">{{ product.subtotal }}₽</p>
+              <a href="{% url 'remove_from_cart' product.product.id %}" 
+                 class="text-red-500 hover:text-red-700 transition-colors p-2 rounded-full hover:bg-red-50"
+                 title="Удалить из корзины">
+                🗑️
+              </a>
+            </div>
           </div>
-          <div class="border-t pt-2 mt-2 flex justify-between font-semibold">
-            <span>Итого:</span>
-            <span>890₽</span>
-          </div>
+          {% endfor %}
+        </div>
+      </div>
+
+      <!-- Итого и кнопка заказа -->
+      <div class="bg-white rounded-lg shadow-lg p-6">
+        <div class="flex items-center justify-between text-xl font-bold mb-6 pb-4 border-b border-gray-200">
+          <span class="text-gray-900">Итого:</span>
+          <span class="text-orange-600">{{ total }}₽</span>
         </div>
 
-        <div class="flex gap-4">
-          <a href="#cart" class="flex-1 text-center px-4 py-2 border rounded bg-gray-100">Назад к корзине</a>
-          <button type="submit" class="flex-1 bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white px-4 py-2 rounded">
-            Подтвердить заказ
-          </button>
-        </div>
-      </form>
-    </div> -->
-
+        <a href="{% url 'create_order' %}"
+          class="w-full block text-center bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-4 py-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]">
+          Оформить заказ
+        </a>
+        
+        <!-- Продолжить покупки -->
+        <a href="{% url 'menu' %}"
+          class="w-full block text-center border border-gray-300 text-gray-700 font-semibold px-4 py-3 rounded-lg mt-3 hover:bg-gray-50 transition-colors">
+          ← Продолжить покупки
+        </a>
+      </div>
     </div>
+
+    {% else %}
+    <!-- Пустая корзина -->
+    <div class="text-center py-16">
+      <div class="text-8xl mb-6">🛒</div>
+      <h1 class="text-3xl font-bold text-gray-900 mb-4">Корзина пуста</h1>
+      <p class="text-xl text-gray-600 mb-8 max-w-md mx-auto">
+        Добавьте вкусные шашлыки из нашего меню
+      </p>
+      <a href="{% url 'menu' %}"
+        class="inline-block bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300">
+        Перейти к меню
+      </a>
     </div>
-
-    {% endblock %}
-
+    {% endif %}
+  </div>
+  {% endblock %}
 </body>
 
 </html>

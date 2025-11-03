@@ -57,23 +57,37 @@
             <a href="{% url 'home' %}"
               class="px-4 py-2 rounded-lg font-medium {% if request.resolver_match.url_name == 'home' %}text-orange-600 bg-orange-100 shadow-sm{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Главная</a>
             <a href="{% url 'menu' %}"
-              class="px-4 py-2 rounded-lg font-medium {% if request.resolver_match.url_name == 'menu' %}text-orange-600 bg-orange-100 shadow-sm{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Меню</a>
+              class="px-4 py-2 rounded-lg font-medium {% if request.resolver_match.url_name in menu_urls %}text-orange-600 bg-orange-100 shadow-sm{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Меню</a>
             <a href="{% url 'cart' %}"
-              class="px-4 py-2 rounded-lg font-medium {% if request.resolver_match.url_name == 'cart' %}text-orange-600 bg-orange-100 shadow-sm{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Корзина</a>
+              class="relative px-4 py-2 rounded-lg font-medium {% if request.resolver_match.url_name == 'cart' %}text-orange-600 bg-orange-100 shadow-sm{% else %}text-gray-700 hover:bg-gray-100{% endif %}">
+              Корзина
+              {% if cart_items_count > 0 %}
+              <span
+                class="absolute -top-2 -right-2 bg-orange-500 text-white text-xs rounded-full h-6 w-6 flex items-center justify-center">
+                {{ cart_items_count }}
+              </span>
+              {% endif %}
+            </a>
             <a href="{% url 'orders' %}"
               class="px-4 py-2 rounded-lg font-medium {% if request.resolver_match.url_name == 'orders' %}text-orange-600 bg-orange-100 shadow-sm{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Мои
               заказы</a>
             <a href="{% url 'delivery' %}"
-              class="px-4 py-2 rounded-lg font-medium {% if request.resolver_match.url_name == 'delivery' %}text-orange-600 bg-orange-100 shadow-sm{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Доставка и оплата</a>
+              class="px-4 py-2 rounded-lg font-medium {% if request.resolver_match.url_name == 'delivery' %}text-orange-600 bg-orange-100 shadow-sm{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Доставка
+              и оплата</a>
             <a href="{% url 'contacts' %}"
               class="px-4 py-2 rounded-lg font-medium {% if request.resolver_match.url_name == 'contacts' %}text-orange-600 bg-orange-100 shadow-sm{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Контакты</a>
-           
+
           </div>
 
           <!-- Cart Icon (Mobile) -->
           <a href="{% url 'cart' %}" class="lg:hidden relative">
             <div class="p-2 rounded-full bg-orange-100 text-orange-600 text-lg">🛒</div>
-            
+            {% if cart_items_count > 0 %}
+            <span
+              class="absolute -top-1 -right-1 bg-orange-500 text-white text-xs rounded-full h-5 w-5 flex items-center justify-center">
+              {{ cart_items_count }}
+            </span>
+            {% endif %}
           </a>
         </div>
 
@@ -83,14 +97,15 @@
             <a href="{% url 'home' %}"
               class="px-3 py-1 rounded-full {% if request.resolver_match.url_name == 'home' %}bg-orange-100 text-orange-600{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Главная</a>
             <a href="{% url 'menu' %}"
-              class="px-3 py-1 rounded-full {% if request.resolver_match.url_name == 'menu' %}bg-orange-100 text-orange-600{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Меню</a>
+              class="px-3 py-1 rounded-full {% if request.resolver_match.url_name in menu_urls %}bg-orange-100 text-orange-600{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Меню</a>
             <a href="{% url 'cart' %}"
               class="px-3 py-1 rounded-full {% if request.resolver_match.url_name == 'cart' %}bg-orange-100 text-orange-600{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Корзина</a>
             <a href="{% url 'orders' %}"
               class="px-3 py-1 rounded-full {% if request.resolver_match.url_name == 'orders' %}bg-orange-100 text-orange-600{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Мои
               заказы</a>
             <a href="{% url 'delivery' %}"
-              class="px-3 py-1 rounded-full {% if request.resolver_match.url_name == 'delivery' %}bg-orange-100 text-orange-600{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Доставка и оплата</a>
+              class="px-3 py-1 rounded-full {% if request.resolver_match.url_name == 'delivery' %}bg-orange-100 text-orange-600{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Доставка
+              и оплата</a>
             <a href="{% url 'contacts' %}"
               class="px-3 py-1 rounded-full {% if request.resolver_match.url_name == 'contacts' %}bg-orange-100 text-orange-600{% else %}text-gray-700 hover:bg-gray-100{% endif %}">Контакты</a>
           </div>

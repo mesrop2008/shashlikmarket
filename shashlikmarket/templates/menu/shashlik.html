@@ -23,16 +23,38 @@
 
         <!-- Categories -->
         <div class="grid grid-cols-2 md:grid-cols-8 gap-2 mb-8 text-center">
-            <a href="{% url 'menu' %}" class="py-2 px-4 bg-orange-100 rounded-lg font-semibold inline-block">🍽️ Всё меню</a>
-            <a href="{% url 'shashlik' %}" class="py-2 px-4 bg-gray-100 rounded-lg hover:bg-orange-100 inline-block">🍖
-                Шашлыки</a>
-            <a href="{% url 'kebab' %}" class="py-2 px-4 bg-gray-100 rounded-lg hover:bg-orange-100 inline-block">🍢
-                Люля-кебаб</a>
-            <a href="{% url 'sets' %}" class="py-2 px-4 bg-gray-100 rounded-lg hover:bg-orange-100 inline-block">🥗 Сеты</a>
-            <a href="{% url 'garnirs' %}" class="py-2 px-4 bg-gray-100 rounded-lg hover:bg-orange-100 inline-block">🍚 Гарниры</a>
-            <a href="{% url 'fishes' %}" class="py-2 px-4 bg-gray-100 rounded-lg hover:bg-orange-100 inline-block">🐟 Рыба</a>
-            <a href="{% url 'drinks' %}" class="py-2 px-4 bg-gray-100 rounded-lg hover:bg-orange-100 inline-block">🥤 Напитки</a>
-            <a href="{% url 'souces' %}" class="py-2 px-4 bg-gray-100 rounded-lg hover:bg-orange-100 inline-block">🧂 Соусы</a>
+            <a href="{% url 'menu' %}"
+               class="py-2 px-4 rounded-lg font-semibold inline-block {% if active_category == 'all' %}bg-orange-100{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
+                🍽️ Всё меню
+            </a>
+            <a href="{% url 'shashlik' %}"
+               class="py-2 px-4 rounded-lg inline-block {% if active_category == 'meat' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
+                🍖 Шашлыки
+            </a>
+            <a href="{% url 'kebab' %}"
+               class="py-2 px-4 rounded-lg inline-block {% if active_category == 'kebab' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
+                🍢 Люля-кебаб
+            </a>
+            <a href="{% url 'sets' %}"
+               class="py-2 px-4 rounded-lg inline-block {% if active_category == 'sets' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
+                🥗 Сеты
+            </a>
+            <a href="{% url 'garnirs' %}"
+               class="py-2 px-4 rounded-lg inline-block {% if active_category == 'garnirs' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
+                🍚 Гарниры
+            </a>
+            <a href="{% url 'fishes' %}"
+               class="py-2 px-4 rounded-lg inline-block {% if active_category == 'fishes' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
+                🐟 Рыба
+            </a>
+            <a href="{% url 'drinks' %}"
+               class="py-2 px-4 rounded-lg inline-block {% if active_category == 'drinks' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
+                🥤 Напитки
+            </a>
+            <a href="{% url 'souces' %}"
+               class="py-2 px-4 rounded-lg inline-block {% if active_category == 'souces' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
+                🧂 Соусы
+            </a>
         </div>
 
 
@@ -43,7 +65,7 @@
             <div
                 class="group hover:shadow-xl transition-all duration-300 overflow-hidden border-0 shadow-lg rounded-lg">
                 <div class="relative overflow-hidden">
-                    <img src="{% static product.imagepath %}"
+                    <img src="{{ product.imagepath }}"
                         class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300">
                     <div class="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1 rounded-full font-semibold">
                         {{ product.price }}₽
