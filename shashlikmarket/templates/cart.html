@@ -30,7 +30,7 @@
           <!-- Товар -->
           <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
             <!-- Картинка товара -->
-            <img src="{{ product.imagepath }}" alt="{{ product.name }}" 
+            <img src="{{ product.imagepath }}?f_auto,q_auto,w_300,h_300,c_fill,g_auto" alt="{{ product.name }}" loading="lazy"
                  class="w-20 h-20 object-cover rounded-lg flex-shrink-0">
 
             <!-- Информация о товаре -->
@@ -48,7 +48,7 @@
               <span class="w-12 text-center font-semibold text-gray-900">{{ product.quantity }}</span>
               <a href="{% url 'add_to_cart' product.product.id %}" 
                  class="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors">
-                <span class="text-lg font-bold">+32</span>
+                <span class="text-lg font-bold">+</span>
               </a>
             </div>
 

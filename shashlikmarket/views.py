@@ -70,19 +70,20 @@ def add_to_cart(request, product_id):
     product = get_object_or_404(Products, id=product_id)
     cart = get_cart(request)
     
+    # Используем URL изображения вместо объекта CloudinaryResource
+    image_url = product.image.url if product.image else ''
+
     if str(product.id) not in cart:
-        cart[str(product_id)] = {
+        cart[str(product.id)] = {
             'quantity': 1,
             'name': product.name,
-            'imagepath': product.imagepath,
+            'imagepath': image_url,
             'price': str(product.price),
-            
         }
     else:
         cart[str(product.id)]['quantity'] += 1
     
     save_cart(request, cart)
-
     return redirect('cart')
 
 
@@ -119,12 +120,11 @@ def cart_detail(request):
     total = 0
     
     for product_id, item in cart.items():
-        form = OrderForm
         product = Products.objects.get(id=product_id)
         quantity = item['quantity']
-        price = item['price']
+        price = float(item['price'])  # переводим в число для вычислений
         name = item['name']
-        subtotal = int(quantity) * int(price)
+        subtotal = quantity * price
         total += subtotal
         
         items.append({
@@ -133,10 +133,14 @@ def cart_detail(request):
             'price': price,
             'quantity': quantity,
             'subtotal': subtotal,
-            'imagepath': item.get('imagepath')
+            'imagepath': item.get('imagepath')  # теперь ключ совпадает
         })
 
-    return render(request, 'cart.html', {'items': items,'total': total})  
+    context = {
+        'items': items,
+        'total': total
+    }
+    return render(request, 'cart.html', context)
 
 #создание заказа
 def create_order(request):
