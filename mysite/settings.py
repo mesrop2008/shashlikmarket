@@ -8,27 +8,15 @@ from dotenv import load_dotenv
 import cloudinary
 import dj_database_url
 
-# --------------------------------------------------
-# Базовая директория
-# --------------------------------------------------
 BASE_DIR = Path(__file__).resolve().parent.parent
 
-# --------------------------------------------------
-# Загружаем переменные из .env
-# --------------------------------------------------
 load_dotenv(BASE_DIR / ".env")
 
-# --------------------------------------------------
-# Основные настройки
-# --------------------------------------------------
 SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key-for-dev")
 DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "yes")
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
 
-# --------------------------------------------------
-# Приложения
-# --------------------------------------------------
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -72,9 +60,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
 
-# --------------------------------------------------
-# База данных
-# --------------------------------------------------
+
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql',
@@ -89,9 +75,6 @@ DATABASES = {
     }
 }
 
-# --------------------------------------------------
-# Cloudinary
-# --------------------------------------------------
 CLOUDINARY_STORAGE = {
     "CLOUD_NAME": os.getenv("CLOUDINARY_CLOUD_NAME"),
     "API_KEY": os.getenv("CLOUDINARY_API_KEY"),
@@ -106,9 +89,6 @@ cloudinary.config(
 
 DEFAULT_FILE_STORAGE = 'cloudinary_storage.storage.MediaCloudinaryStorage'
 
-# --------------------------------------------------
-# Проверка паролей
-# --------------------------------------------------
 AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator'},
     {'NAME': 'django.contrib.auth.password_validation.MinimumLengthValidator'},
@@ -116,9 +96,7 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-# --------------------------------------------------
-# Локализация и форматирование
-# --------------------------------------------------
+
 LANGUAGE_CODE = 'ru-ru'
 TIME_ZONE = 'Asia/Irkutsk'
 USE_I18N = True
@@ -131,12 +109,6 @@ SHORT_DATE_FORMAT = 'd.m.Y'
 SHORT_DATETIME_FORMAT = 'd.m.Y H:i'
 FIRST_DAY_OF_WEEK = 1
 
-# --------------------------------------------------
-# Статические файлы
-# --------------------------------------------------
 STATIC_URL = '/static/'
 
-# --------------------------------------------------
-# ID полей по умолчанию
-# --------------------------------------------------
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
