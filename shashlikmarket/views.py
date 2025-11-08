@@ -4,7 +4,6 @@ from django.views.decorators.http import require_GET
 from .models import *
 from .utils import get_cart, save_cart
 from .forms import OrderForm
-from django.contrib import messages
 
 def home(request):
     cart = get_cart(request)

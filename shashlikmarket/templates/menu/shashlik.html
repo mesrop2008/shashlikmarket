@@ -62,50 +62,52 @@
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
             <!-- Card example -->
             {% for product in shashliks %}
-            <div class="group hover:shadow-xl transition-all duration-300 overflow-hidden border-0 shadow-lg rounded-lg"
-                data-product-id="{{ product.id }}">
-                <div class="relative overflow-hidden">
-                    <img src="{{ product.image.url }}?f_auto,q_auto,w_300,h_300,c_fill,g_auto" alt="{{ product.name }}"
-                        loading="lazy"
-                        class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300" />
-                    <div class="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1 rounded-full font-semibold">
-                        {{product.price }}₽</div>
-                </div>
+            <div
+        class="group product-card hover:shadow-xl transition-all duration-300 overflow-hidden border-0 shadow-lg rounded-lg"
+        data-product-id="{{ product.id }}">
+        <div class="relative overflow-hidden">
+          <img src="{{ product.image.url }}?f_auto,q_auto,w_300,h_300,c_fill,g_auto" alt="{{ product.name }}"
+            loading="lazy" class="w-full h-48 object-cover group-hover:scale-110 transition-transform duration-300" />
+          <div class="absolute top-4 right-4 bg-orange-600 text-white px-3 py-1 rounded-full font-semibold">{{ product.price }}₽</div>
+        </div>
 
-                <div class="p-6">
-                    <div class="flex items-start justify-between mb-2">
-                        <h3 class="text-xl font-bold text-gray-900">{{ product.name }}</h3>
-                        <span class="px-2 py-1 text-sm bg-gray-100 rounded">{{ product.weight }}г</span>
-                    </div>
+        <div class="p-6">
+          <div class="flex items-start justify-between mb-2">
+            <h3 class="text-xl font-bold text-gray-900">{{ product.name }}</h3>
+            <span class="px-2 py-1 text-sm bg-gray-100 rounded">{{ product.weight }}г</span>
+          </div>
 
-                    <p class="text-gray-600 mb-4 leading-relaxed">{{ product.description }}</p>
+          <p class="text-gray-600 mb-4 leading-relaxed">{{ product.description }}</p>
 
-                    <div class="flex items-center justify-between mb-4">
-                        <div class="flex items-center gap-1 text-orange-400">
-                            ★★★★★ <span class="text-gray-500 ml-1">(4.8)</span>
-                        </div>
-                        <div class="flex items-center gap-1 text-sm text-gray-500">🕒 25–30 мин</div>
-                    </div>
-
-                    {% if product.id|stringformat:"s" in cart %}
-                    <div
-                        class="quantity-controls flex items-center justify-between w-full bg-orange-50 border border-orange-300 rounded-lg p-2 mt-2">
-                        <a href="{% url 'remove_quantity' product.id %}" data-product-id="{{ product.id }}"
-                            class="remove-quantity-btn w-8 h-8 flex items-center justify-center text-lg font-bold bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">−</a>
-                        <span class="product-quantity font-semibold text-gray-800 text-lg select-none">{{ product.quantity }}</span>
-                        <a href="{% url 'add_to_cart' product.id %}" data-product-id="{{ product.id }}"
-                            data-product-name="{{ product.name }}"
-                            class="add-in-controls w-8 h-8 flex items-center justify-center text-lg font-bold bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">+</a>
-                    </div>
-                    {% else %}
-                    <a href="{% url 'add_to_cart' product.id %}" data-product-id="{{ product.id }}"
-                        data-product-name="{{ product.name }}"
-                        class="add-to-cart-button w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-4 py-2 rounded text-center block">
-                        Добавить в корзину
-                    </a>
-                    {% endif %}
-                </div>
+          <div class="flex items-center justify-between mb-4">
+            <div class="flex items-center gap-1 text-orange-400">
+              ★★★★★ <span class="text-gray-500 ml-1">(4.8)</span>
             </div>
+            <div class="flex items-center gap-1 text-sm text-gray-500">🕒 25–30 мин</div>
+          </div>
+
+          <!-- Блок кнопок корзины -->
+          <div class="cart-controls">
+            {% if product.id|stringformat:"s" in cart %}
+            <div
+              class="quantity-controls flex items-center justify-between w-full bg-orange-50 border border-orange-300 rounded-lg p-2">
+              <a href="{% url 'remove_quantity' product.id %}" data-product-id="{{ product.id }}"
+                class="remove-quantity-btn w-8 h-8 flex items-center justify-center text-lg font-bold bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">−</a>
+              <span class="product-quantity font-semibold text-gray-800 text-lg select-none">{{ product.quantity }}</span>
+              <a href="{% url 'add_to_cart' product.id %}" data-product-id="{{ product.id }}"
+                data-product-name="{{ product.name }}"
+                class="add-in-controls w-8 h-8 flex items-center justify-center text-lg font-bold bg-orange-500 text-white rounded-full hover:bg-orange-600 transition cursor-pointer">+</a>
+            </div>
+            {% else %}
+            <a href="{% url 'add_to_cart' product.id %}" data-product-id="{{ product.id }}"
+              data-product-name="{{ product.name }}"
+              class="add-to-cart-button w-full bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-4 py-2 rounded text-center block">
+              Добавить в корзину
+            </a>
+            {% endif %}
+          </div>
+        </div>
+      </div>
             {% endfor %}
             <!-- Повторяем карточки для других блюд -->
 
