@@ -9,10 +9,16 @@ def home(request):
 
 
 def menu(request):
+    cart = get_cart(request)
     products = Products.objects.order_by('id')
     active_category = 'all'
+
+    for p in products:
+        p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
+        
     context = {'products': products,
-    'active_category': active_category}
+    'active_category': active_category,
+    'cart': cart}
     return render(request, 'menu.html', context)
 
 def shashlik(request):
