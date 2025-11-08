@@ -26,7 +26,7 @@ It was developed as a **portfolio project** to showcase full-stack web developme
 
 ### 1. Clone the repository
 ```bash
-git clone https://github.com/<mesrop2008>/<shashlikmarket>.git
+git clone https://github.com/mesrop2008/shashlikmarket.git
 cd <shashlikmarket>
 ```
 
