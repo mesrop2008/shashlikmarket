@@ -17,89 +17,96 @@
       🛒 Корзина
     </h1>
 
-    {% if items %}
-    <div class="space-y-6">
-      <!-- Cart Items -->
-      <div class="bg-white rounded-lg shadow-lg overflow-hidden">
-        <div class="p-6 border-b border-gray-200">
-          <h2 class="text-xl font-semibold text-gray-900">Ваши товары</h2>
-        </div>
-        
-        <div class="p-6 space-y-4">
-          {% for product in items %}
-          <!-- Товар -->
-          <div class="flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow">
-            <!-- Картинка товара -->
-            <img src="{{ product.imagepath }}?f_auto,q_auto,w_300,h_300,c_fill,g_auto" alt="{{ product.name }}" loading="lazy"
-                 class="w-20 h-20 object-cover rounded-lg flex-shrink-0">
-
-            <!-- Информация о товаре -->
-            <div class="flex-1 min-w-0">
-              <h3 class="font-semibold text-gray-900 text-lg mb-1">{{ product.name }}</h3>
-              <p class="text-gray-600">{{ product.price }}₽ за порцию</p>
-            </div>
-
-            <!-- Управление количеством -->
-            <div class="flex items-center gap-3 bg-gray-100 rounded-lg px-3 py-2">
-              <a href="{% url 'remove_quantity' product.product.id %}" 
-                 class="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors">
-                <span class="text-lg font-bold">-</span>
-              </a>
-              <span class="w-12 text-center font-semibold text-gray-900">{{ product.quantity }}</span>
-              <a href="{% url 'add_to_cart' product.product.id %}" 
-                 class="w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors">
-                <span class="text-lg font-bold">+</span>
-              </a>
-            </div>
-
-            <!-- Цена и удаление -->
-            <div class="text-right flex flex-col items-end gap-2">
-              <p class="font-semibold text-lg text-gray-900">{{ product.subtotal }}₽</p>
-              <a href="{% url 'remove_from_cart' product.product.id %}" 
-                 class="text-red-500 hover:text-red-700 transition-colors p-2 rounded-full hover:bg-red-50"
-                 title="Удалить из корзины">
-                🗑️
-              </a>
-            </div>
+    <div class="cart-content">
+      {% if items %}
+      <div class="space-y-6">
+        <!-- Cart Items -->
+        <div class="bg-white rounded-lg shadow-lg overflow-hidden">
+          <div class="p-6 border-b border-gray-200">
+            <h2 class="text-xl font-semibold text-gray-900">Ваши товары</h2>
           </div>
-          {% endfor %}
+          
+          <div class="p-6 space-y-4" id="cart-items-container">
+            {% for product in items %}
+            <!-- Товар -->
+            <div class="cart-item flex items-center gap-4 p-4 border border-gray-200 rounded-lg hover:shadow-md transition-shadow" 
+                 data-product-id="{{ product.product.id }}" 
+                 data-price="{{ product.price }}">
+              <!-- Картинка товара -->
+              <img src="{{ product.imagepath }}?f_auto,q_auto,w_300,h_300,c_fill,g_auto" alt="{{ product.name }}" loading="lazy"
+                   class="w-20 h-20 object-cover rounded-lg flex-shrink-0">
+
+              <!-- Информация о товаре -->
+              <div class="flex-1 min-w-0">
+                <h3 class="font-semibold text-gray-900 text-lg mb-1">{{ product.name }}</h3>
+                <p class="text-gray-600">{{ product.price }}₽ за порцию</p>
+              </div>
+
+              <!-- Управление количеством -->
+              <div class="flex items-center gap-3 bg-gray-100 rounded-lg px-3 py-2">
+                <a href="{% url 'remove_quantity' product.product.id %}" 
+                   data-product-id="{{ product.product.id }}"
+                   class="cart-remove-btn w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors">
+                  <span class="text-lg font-bold">-</span>
+                </a>
+                <span class="product-quantity w-12 text-center font-semibold text-gray-900">{{ product.quantity }}</span>
+                <a href="{% url 'add_to_cart' product.product.id %}" 
+                   data-product-id="{{ product.product.id }}"
+                   class="cart-add-btn w-8 h-8 flex items-center justify-center bg-white rounded-full shadow-sm hover:bg-gray-50 transition-colors">
+                  <span class="text-lg font-bold">+</span>
+                </a>
+              </div>
+
+              <!-- Цена и удаление -->
+              <div class="text-right flex flex-col items-end gap-2">
+                <p class="product-subtotal font-semibold text-lg text-gray-900">{{ product.subtotal }}₽</p>
+                <a href="{% url 'remove_from_cart' product.product.id %}" 
+                   data-product-id="{{ product.product.id }}"
+                   data-product-name="{{ product.name }}"
+                   class="cart-remove-item-btn text-red-500 hover:text-red-700 transition-colors p-2 rounded-full hover:bg-red-50"
+                   title="Удалить из корзины">
+                  🗑️
+                </a>
+              </div>
+            </div>
+            {% endfor %}
+          </div>
+        </div>
+
+        <!-- Итого и кнопка заказа -->
+        <div class="bg-white rounded-lg shadow-lg p-6">
+          <div class="flex items-center justify-between text-xl font-bold mb-6 pb-4 border-b border-gray-200">
+            <span class="text-gray-900">Итого:</span>
+            <span class="cart-total text-orange-600">{{ total }}₽</span>
+          </div>
+
+          <a href="{% url 'create_order' %}"
+            class="w-full block text-center bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-4 py-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]">
+            Оформить заказ
+          </a>
+          
+          <!-- Продолжить покупки -->
+          <a href="{% url 'menu' %}"
+            class="w-full block text-center border border-gray-300 text-gray-700 font-semibold px-4 py-3 rounded-lg mt-3 hover:bg-gray-50 transition-colors">
+            ← Продолжить покупки
+          </a>
         </div>
       </div>
-
-      <!-- Итого и кнопка заказа -->
-      <div class="bg-white rounded-lg shadow-lg p-6">
-        <div class="flex items-center justify-between text-xl font-bold mb-6 pb-4 border-b border-gray-200">
-          <span class="text-gray-900">Итого:</span>
-          <span class="text-orange-600">{{ total }}₽</span>
-        </div>
-
-        <a href="{% url 'create_order' %}"
-          class="w-full block text-center bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-4 py-4 rounded-lg transition-all duration-300 transform hover:scale-[1.02] active:scale-[0.98]">
-          Оформить заказ
-        </a>
-        
-        <!-- Продолжить покупки -->
+      {% else %}
+      <!-- Пустая корзина -->
+      <div class="empty-cart text-center py-16">
+        <div class="text-8xl mb-6">🛒</div>
+        <h1 class="text-3xl font-bold text-gray-900 mb-4">Корзина пуста</h1>
+        <p class="text-xl text-gray-600 mb-8 max-w-md mx-auto">
+          Добавьте вкусные шашлыки из нашего меню
+        </p>
         <a href="{% url 'menu' %}"
-          class="w-full block text-center border border-gray-300 text-gray-700 font-semibold px-4 py-3 rounded-lg mt-3 hover:bg-gray-50 transition-colors">
-          ← Продолжить покупки
+          class="inline-block bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300">
+          Перейти к меню
         </a>
       </div>
+      {% endif %}
     </div>
-
-    {% else %}
-    <!-- Пустая корзина -->
-    <div class="text-center py-16">
-      <div class="text-8xl mb-6">🛒</div>
-      <h1 class="text-3xl font-bold text-gray-900 mb-4">Корзина пуста</h1>
-      <p class="text-xl text-gray-600 mb-8 max-w-md mx-auto">
-        Добавьте вкусные шашлыки из нашего меню
-      </p>
-      <a href="{% url 'menu' %}"
-        class="inline-block bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-8 py-4 rounded-lg transition-all duration-300">
-        Перейти к меню
-      </a>
-    </div>
-    {% endif %}
   </div>
   {% endblock %}
 </body>
