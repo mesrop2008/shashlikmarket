@@ -1,18 +1,20 @@
 <!DOCTYPE html>
 <html lang="ru">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Оформление заказа</title>
     <script src="https://cdn.tailwindcss.com"></script>
 </head>
+
 <body class="bg-gray-100">
     {% extends "layout.html" %}
     {% load static %}
     {% block content %}
     <div class="container mx-auto px-4 py-8">
         <h1 class="text-3xl font-bold text-center mb-8">Оформление заказа</h1>
-        
+
         <div class="max-w-2xl mx-auto bg-white rounded-lg shadow-md p-6">
             <!-- Показываем товары в корзине -->
             <div class="mb-6">
@@ -26,7 +28,7 @@
                     <span class="font-medium">{{ item.total }} ₽</span>
                 </div>
                 {% endfor %}
-                
+
                 <div class="flex justify-between items-center border-t pt-4 mt-4">
                     <span class="text-lg font-bold">Итого:</span>
                     <span class="text-lg font-bold">{{ total_price }} ₽</span>
@@ -36,52 +38,66 @@
             <!-- Форма заказа -->
             <form method="post">
                 {% csrf_token %}
-                
-                <div class="space-y-4">
-                    <!-- Имя -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            {{ form.customer_name.label }}
-                        </label>
-                        {{ form.customer_name }}
-                    </div>
 
-                    <!-- Телефон -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            {{ form.customer_phone.label }}
-                        </label>
-                        {{ form.customer_phone }}
-                    </div>
-
-                    <!-- Способ получения -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            {{ form.delivery_type.label }}
-                        </label>
-                        {{ form.delivery_type }}
-                    </div>
-
-                    <!-- Адрес доставки (показываем только если выбран способ "Доставка") -->
-                    <div id="address-field">
-                        <label class="block text-sm font-medium text-gray-700 mb-1">
-                            {{ form.customer_address.label }}
-                        </label>
-                        {{ form.customer_address }}
-                    </div>
-
-                    <!-- Способ оплаты -->
-                    <div>
-                        <label class="block text-sm font-medium text-gray-700 mb-2">
-                            {{ form.pay_type.label }}
-                        </label>
-                        {{ form.pay_type }}
-                    </div>
+                <!-- Имя -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.customer_name.label }}
+                    </label>
+                    {{ form.customer_name }}
+                    {% if form.customer_name.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.customer_name.errors.0 }}</p>
+                    {% endif %}
                 </div>
 
+                <!-- Телефон -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.customer_phone.label }}
+                    </label>
+                    {{ form.customer_phone }}
+                    {% if form.customer_phone.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.customer_phone.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Способ получения -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        {{ form.delivery_type.label }}
+                    </label>
+                    {{ form.delivery_type }}
+                    {% if form.delivery_type.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.delivery_type.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Адрес доставки -->
+                <div id="address-field">
+                    <label class="block text-sm font-medium text-gray-700 mb-1">
+                        {{ form.customer_address.label }}
+                    </label>
+                    {{ form.customer_address }}
+                    {% if form.customer_address.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.customer_address.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+                <!-- Способ оплаты -->
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">
+                        {{ form.pay_type.label }}
+                    </label>
+                    {{ form.pay_type }}
+                    {% if form.pay_type.errors %}
+                    <p class="text-red-500 text-sm mt-1">{{ form.pay_type.errors.0 }}</p>
+                    {% endif %}
+                </div>
+
+
                 <!-- Кнопка отправки -->
-                <button type="submit" 
-                        class="w-full block text-center bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-4 py-3 rounded mt-6">
+                <button type="submit"
+                    class="w-full block text-center bg-gradient-to-r from-orange-500 to-red-500 hover:from-orange-600 hover:to-red-600 text-white font-semibold px-4 py-3 rounded mt-6">
                     Оформить заказ
                 </button>
             </form>
@@ -90,10 +106,10 @@
 
     <!-- JavaScript для скрытия/показа поля адреса -->
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const deliveryTypeSelect = document.querySelector('select[name="delivery_type"]');
             const addressField = document.getElementById('address-field');
-            
+
             function toggleAddressField() {
                 if (deliveryTypeSelect.value === 'pickup') {
                     addressField.style.display = 'none';
@@ -101,7 +117,7 @@
                     addressField.style.display = 'block';
                 }
             }
-            
+
             // Вызываем при загрузке и при изменении выбора
             toggleAddressField();
             deliveryTypeSelect.addEventListener('change', toggleAddressField);
@@ -109,4 +125,5 @@
     </script>
     {% endblock %}
 </body>
+
 </html>

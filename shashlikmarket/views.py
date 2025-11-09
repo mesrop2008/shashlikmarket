@@ -250,8 +250,14 @@ def cart_detail(request):
     items = []
     total = 0
     
+    updated_cart = cart.copy()
+
     for product_id, item in cart.items():
-        product = Products.objects.get(id=product_id)
+        try:
+            product = Products.objects.get(id=product_id)
+        except product.DoesNotExist:
+            updated_cart.pop(product_id, None)
+            continue
         quantity = item['quantity']
         price = float(item['price'])
         name = item['name']
@@ -267,6 +273,9 @@ def cart_detail(request):
             'imagepath': item.get('imagepath')
         })
 
+    request.session['cart'] = updated_cart
+    request.session.modified = True    
+
     cart_total_quantity = sum(item['quantity'] for item in cart.values())
     
     context = {
@@ -280,7 +289,7 @@ def create_order(request):
     cart = get_cart(request)
     total_price = 0
     cart_items = []
-
+    
     for product_id, item_data in cart.items():
         try:
             product = Products.objects.get(id=product_id)
