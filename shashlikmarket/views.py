@@ -249,21 +249,25 @@ def cart_detail(request):
     cart = get_cart(request)
     items = []
     total = 0
-    
+
+    product_ids = list(cart.keys())
+    products_list = Products.objects.filter(id__in=product_ids)
+    products_dict = {str(p.id): p for p in products_list}
+
     updated_cart = cart.copy()
 
     for product_id, item in cart.items():
-        try:
-            product = Products.objects.get(id=product_id)
-        except product.DoesNotExist:
+        product = products_dict.get(str(product_id))  
+        if not product:
             updated_cart.pop(product_id, None)
             continue
-        quantity = item['quantity']
-        price = float(item['price'])
-        name = item['name']
+
+        quantity = item.get('quantity', 0)
+        price = float(product.price)
+        name = product.name
         subtotal = quantity * price
         total += subtotal
-        
+
         items.append({
             'product': product,
             'name': name,
@@ -272,18 +276,20 @@ def cart_detail(request):
             'subtotal': subtotal,
             'imagepath': item.get('imagepath')
         })
-
-    request.session['cart'] = updated_cart
-    request.session.modified = True    
-
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
     
+    request.session['cart'] = updated_cart
+    request.session.modified = True
+
+    cart_total_quantity = sum(item.get('quantity', 0) for item in updated_cart.values())
+
     context = {
         'items': items,
         'total': total,
         'cart_total_quantity': cart_total_quantity
     }
+
     return render(request, 'cart.html', context)
+
 
 def create_order(request):
     cart = get_cart(request)
