@@ -12,8 +12,20 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 
 load_dotenv(BASE_DIR / ".env")
 
-SECRET_KEY = os.getenv("SECRET_KEY", "unsafe-secret-key-for-dev")
+SECRET_KEY = os.getenv("SECRET_KEY")
+if not SECRET_KEY:
+    raise ValueError("SECRET_KEY environment variable must be set!")
+
 DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "yes")
+
+if not DEBUG:
+      SECURE_SSL_REDIRECT = True
+      SESSION_COOKIE_SECURE = True
+      CSRF_COOKIE_SECURE = True
+      SECURE_HSTS_SECONDS = 31536000
+      SECURE_BROWSER_XSS_FILTER = True
+      SECURE_CONTENT_TYPE_NOSNIFF = True
+      X_FRAME_OPTIONS = 'DENY'
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
 
@@ -38,6 +50,10 @@ MIDDLEWARE = [
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
+
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SAMESITE = 'Lax'
+SESSION_COOKIE_AGE = 1209600  # 2 weeks
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -110,5 +126,7 @@ SHORT_DATETIME_FORMAT = 'd.m.Y H:i'
 FIRST_DAY_OF_WEEK = 1
 
 STATIC_URL = '/static/'
+STATIC_ROOT = BASE_DIR / 'staticfiles'
+
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
