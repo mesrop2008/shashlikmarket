@@ -5,6 +5,7 @@ from .models import *
 from .utils import get_cart, save_cart
 from .forms import OrderForm
 
+
 def home(request):
     cart = get_cart(request)
     cart_total_quantity = sum(item['quantity'] for item in cart.values())
@@ -14,10 +15,9 @@ def menu(request):
     cart = get_cart(request)
     products = Products.objects.order_by('id')
     active_category = 'all'
-
+    
     for p in products:
         p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
-    
     cart_total_quantity = sum(item['quantity'] for item in cart.values())
         
     context = {
