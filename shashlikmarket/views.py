@@ -7,9 +7,8 @@ from .forms import OrderForm
 
 
 def home(request):
-    cart = get_cart(request)
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-    return render(request, 'index.html', {'cart_total_quantity': cart_total_quantity})
+    return render(request, 'index.html')
+
 
 def menu(request):
     cart = clean_cart(request)
@@ -18,133 +17,126 @@ def menu(request):
     
     for p in products:
         p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-        
+            
     context = {
         'products': products,
         'active_category': active_category,
-        'cart': cart,
-        'cart_total_quantity': cart_total_quantity
+        'cart': cart,  
     }
     return render(request, 'menu.html', context)
+
 
 def shashlik(request):
     cart = get_cart(request)
     shashliks = Products.objects.filter(category__exact='meat')
     active_category = 'meat'
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-    
+        
     for p in shashliks:
         p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
+
     context = {
         'shashliks': shashliks,
         'active_category': active_category,
-        'cart_total_quantity': cart_total_quantity,
         'cart': cart
     }
     return render(request, 'menu/shashlik.html', context)
 
+
 def kebab(request):
     cart = get_cart(request)
-    kebab = Products.objects.filter(category__exact='kebab')
+    kebabs = Products.objects.filter(category__exact='kebab')
     active_category = 'kebab'
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-
-    for p in kebab:
+    
+    for p in kebabs:
         p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
 
     context = {
-        'kebabs': kebab,
+        'kebabs': kebabs,
         'active_category': active_category,
-        'cart_total_quantity': cart_total_quantity,
         'cart': cart
     }
     return render(request, 'menu/kebab.html', context)
 
+
 def sets(request):
     cart = get_cart(request)
-    sets = Products.objects.filter(category__exact='set')
+    sets_qs = Products.objects.filter(category__exact='set')
     active_category = 'sets'
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-    
-    for p in sets:
+        
+    for p in sets_qs:
         p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
 
     context = {
-        'sets': sets,
+        'sets': sets_qs,
         'active_category': active_category,
-        'cart_total_quantity': cart_total_quantity,
         'cart': cart
     }
     return render(request, 'menu/set.html', context)
 
+
 def garnir(request):
     cart = get_cart(request)
-    garnir = Products.objects.filter(category__exact='garnish')
+    garnirs = Products.objects.filter(category__exact='garnish')
     active_category = 'garnirs'
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-    
-    for p in garnir:
+        
+    for p in garnirs:
         p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
 
     context = {
-        'garnirs': garnir,
+        'garnirs': garnirs,
         'active_category': active_category,
-        'cart_total_quantity': cart_total_quantity,
         'cart': cart
     }
     return render(request, 'menu/garnir.html', context)
 
+
 def fish(request):
     cart = get_cart(request)
-    fish = Products.objects.filter(category__exact='fish')
+    fishes = Products.objects.filter(category__exact='fish')
     active_category = 'fishes'
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-
-    for p in fish:
+    
+    for p in fishes:
         p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
 
     context = {
-        'fishes': fish,
+        'fishes': fishes,
         'active_category': active_category,
-        'cart_total_quantity': cart_total_quantity,
         'cart': cart
     }
     return render(request, 'menu/fish.html', context)
 
+
 def drinks(request):
     cart = get_cart(request)
-    drinks = Products.objects.filter(category__exact='drinks')
+    drinks_qs = Products.objects.filter(category__exact='drinks')
     active_category = 'drinks'
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-    
-    for p in drinks:
+       
+    for p in drinks_qs:
         p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
 
     context = {
-        'drinks': drinks,
+        'drinks': drinks_qs,
         'active_category': active_category,
-        'cart_total_quantity': cart_total_quantity,
         'cart': cart
     }
     return render(request, 'menu/drinks.html', context)
 
+
 def souces(request):
     cart = get_cart(request)
-    souces = Products.objects.filter(category__exact='sauce')
+    souces_qs = Products.objects.filter(category__exact='sauce')
     active_category = 'souces'
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-    
-    for p in souces:
+        
+    for p in souces_qs:
         p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
 
     context = {
-        'souces': souces,
+        'souces': souces_qs,
         'active_category': active_category,
-        'cart_total_quantity': cart_total_quantity,
         'cart': cart
     }
     return render(request, 'menu/souces.html', context)
+
 
 @require_GET
 def add_to_cart(request, product_id):
@@ -167,11 +159,7 @@ def add_to_cart(request, product_id):
     
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         total_quantity = sum(item['quantity'] for item in cart.values())
-        
-        # Рассчитываем общую сумму для корзины
-        cart_total = 0
-        for item_id, item_data in cart.items():
-            cart_total += float(item_data['price']) * item_data['quantity']
+        cart_total = sum(float(item['price']) * item['quantity'] for item in cart.values())
         
         return JsonResponse({
             'success': True,
@@ -183,6 +171,7 @@ def add_to_cart(request, product_id):
         })
     
     return redirect('cart')
+
 
 @require_GET
 def remove_quantity(request, product_id):
@@ -200,11 +189,7 @@ def remove_quantity(request, product_id):
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         total_quantity = sum(item['quantity'] for item in cart.values())
         product_quantity = cart.get(product_id_str, {}).get('quantity', 0)
-        
-        # Рассчитываем общую сумму для корзины
-        cart_total = 0
-        for item_id, item_data in cart.items():
-            cart_total += float(item_data['price']) * item_data['quantity']
+        cart_total = sum(float(item['price']) * item['quantity'] for item in cart.values())
         
         return JsonResponse({
             'success': True,
@@ -216,12 +201,13 @@ def remove_quantity(request, product_id):
     
     return redirect('cart')
 
+
 @require_GET
 def remove_from_cart(request, product_id):
     cart = get_cart(request)
     product_id_str = str(product_id)  
-    
     product_name = ""
+    
     if product_id_str in cart:
         product_name = cart[product_id_str]['name']
         del cart[product_id_str]
@@ -229,11 +215,7 @@ def remove_from_cart(request, product_id):
     
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
         total_quantity = sum(item['quantity'] for item in cart.values())
-        
-        # Рассчитываем общую сумму для корзины
-        cart_total = 0
-        for item_id, item_data in cart.items():
-            cart_total += float(item_data['price']) * item_data['quantity']
+        cart_total = sum(float(item['price']) * item['quantity'] for item in cart.values())
         
         return JsonResponse({
             'success': True,
@@ -244,6 +226,7 @@ def remove_from_cart(request, product_id):
         })
     
     return redirect('cart')
+
 
 def cart_detail(request):
     cart = clean_cart(request)
@@ -263,13 +246,12 @@ def cart_detail(request):
 
         quantity = item.get('quantity', 0)
         price = float(product.price)
-        name = product.name
         subtotal = quantity * price
         total += subtotal
 
         items.append({
             'product': product,
-            'name': name,
+            'name': product.name,
             'price': price,
             'quantity': quantity,
             'subtotal': subtotal,
@@ -278,13 +260,10 @@ def cart_detail(request):
     
     request.session['cart'] = updated_cart
     request.session.modified = True
-
-    cart_total_quantity = sum(item.get('quantity', 0) for item in updated_cart.values())
-
+   
     context = {
         'items': items,
         'total': total,
-        'cart_total_quantity': cart_total_quantity
     }
 
     return render(request, 'cart.html', context)
@@ -346,14 +325,11 @@ def create_order(request):
             return redirect('orders')
     else:
         form = OrderForm()
-
-    cart_total_quantity = sum(item.get('quantity', 0) for item in cart.values())
-
+   
     context = {
         'form': form,
         'cart_items': cart_items,
         'total_price': total_price,
-        'cart_total_quantity': cart_total_quantity
     }
 
     return render(request, 'orders/create_order.html', context)
@@ -363,12 +339,13 @@ def orders(request):
     cart = get_cart(request)
     order_ids = request.session.get('user_orders', [])
     
-    orders = Order.objects.filter(id__in=order_ids)\
-                         .prefetch_related('items__product')\
-                         .order_by('-created_at')
+    orders_qs = Order.objects.filter(id__in=order_ids)\
+                             .prefetch_related('items__product')\
+                             .order_by('-created_at')
     active_order_ids = []
     orders_data = []
-    for order in orders:
+    
+    for order in orders_qs:
         if order.status != 'completed':
             active_order_ids.append(order.id)
             
@@ -391,20 +368,15 @@ def orders(request):
     request.session['user_orders'] = active_order_ids
     request.session.modified = True
     
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-    
     context = {
-        'orders': orders_data,
-        'cart_total_quantity': cart_total_quantity
+        'orders': orders_data
     }
     return render(request, 'order.html', context)
 
+
 def delivery(request):
-    cart = get_cart(request)
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-    return render(request, 'delivery.html', {'cart_total_quantity': cart_total_quantity})
+    return render(request, 'delivery.html')
+
 
 def contacts(request):
-    cart = get_cart(request)
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-    return render(request, 'contacts.html', {'cart_total_quantity': cart_total_quantity})
+    return render(request, 'contacts.html')
