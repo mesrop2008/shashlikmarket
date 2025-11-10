@@ -2,7 +2,7 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.http import JsonResponse
 from django.views.decorators.http import require_GET
 from .models import *
-from .utils import get_cart, save_cart
+from .utils import get_cart, save_cart, clean_cart
 from .forms import OrderForm
 
 
@@ -12,7 +12,7 @@ def home(request):
     return render(request, 'index.html', {'cart_total_quantity': cart_total_quantity})
 
 def menu(request):
-    cart = get_cart(request)
+    cart = clean_cart(request)
     products = Products.objects.order_by('id')
     active_category = 'all'
     
@@ -246,7 +246,7 @@ def remove_from_cart(request, product_id):
     return redirect('cart')
 
 def cart_detail(request):
-    cart = get_cart(request)
+    cart = clean_cart(request)
     items = []
     total = 0
 
@@ -259,7 +259,6 @@ def cart_detail(request):
     for product_id, item in cart.items():
         product = products_dict.get(str(product_id))  
         if not product:
-            updated_cart.pop(product_id, None)
             continue
 
         quantity = item.get('quantity', 0)
