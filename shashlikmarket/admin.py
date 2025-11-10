@@ -1,11 +1,11 @@
 from django.contrib import admin
 from django.utils.html import format_html
 from .models import Order, OrderItem, Products
-
+import math
 
 @admin.register(Products)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'price', 'category', 'preview']
+    list_display = ['name', 'price_with_currency', 'category', 'preview']
     readonly_fields = ['preview']
 
     def preview(self, obj):
@@ -13,6 +13,11 @@ class ProductAdmin(admin.ModelAdmin):
             return format_html('<img src="{}" width="100" />', obj.image.url)
         return "Нет изображения"
     preview.short_description = "Превью"
+    def price_with_currency(self, obj):
+        if obj.price % 1 == 0:
+            return f"{int(obj.price)} ₽"
+        return f"{obj.price:.2f} ₽"
+    price_with_currency.short_description = "Цена"
 
 class OrderItemInline(admin.TabularInline):
     model = OrderItem
