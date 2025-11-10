@@ -295,67 +295,70 @@ def create_order(request):
     cart = get_cart(request)
     total_price = 0
     cart_items = []
-    
-    for product_id, item_data in cart.items():
-        try:
-            product = Products.objects.get(id=product_id)
-            item_total = product.price * item_data['quantity']
-            total_price += item_total  
 
-            cart_items.append({
-                'product': product,
-                'quantity': item_data['quantity'],
-                'total': item_total,
-            })
-            
-        except Products.DoesNotExist:
+    product_ids = list(cart.keys())
+    products_list = Products.objects.filter(id__in=product_ids)
+    products_dict = {str(p.id): p for p in products_list}
+
+    for product_id, item_data in cart.items():
+        product = products_dict.get(str(product_id))
+        if not product:
             continue
-   
+
+        quantity = item_data.get('quantity', 0)
+        item_total = product.price * quantity
+        total_price += item_total
+
+        cart_items.append({
+            'product': product,
+            'quantity': quantity,
+            'total': item_total,
+            'imagepath': item_data.get('imagepath')
+        })
+
     if request.method == 'POST':
         form = OrderForm(request.POST)
         if form.is_valid():
             order = Order.objects.create(
-                customer_name=form.cleaned_data['customer_name'],      
-                customer_phone=form.cleaned_data['customer_phone'],    
-                delivery_type=form.cleaned_data['delivery_type'],     
+                customer_name=form.cleaned_data['customer_name'],
+                customer_phone=form.cleaned_data['customer_phone'],
+                delivery_type=form.cleaned_data['delivery_type'],
                 customer_address=form.cleaned_data['customer_address'],
-                pay_type=form.cleaned_data['pay_type'],                
+                pay_type=form.cleaned_data['pay_type'],
                 total_price=total_price
             )
-                        
+
             for product_id, item_data in cart.items():
-                try:
-                    product = Products.objects.get(id=product_id)
+                product = products_dict.get(str(product_id))
+                if product:
                     OrderItem.objects.create(
-                        order=order,       
-                        product=product,    
-                        quantity=item_data['quantity']  
+                        order=order,
+                        product=product,
+                        quantity=item_data.get('quantity', 0)
                     )
-                except Products.DoesNotExist:
-                    continue
-            
+
             if 'user_orders' not in request.session:
                 request.session['user_orders'] = []
-    
+
             request.session['user_orders'].append(order.id)
             request.session.modified = True
 
             save_cart(request, {})
             return redirect('orders')
-    
     else:
         form = OrderForm()
-    
-    cart_total_quantity = sum(item['quantity'] for item in cart.values())
-    
+
+    cart_total_quantity = sum(item.get('quantity', 0) for item in cart.values())
+
     context = {
-        'form': form,            
-        'cart_items': cart_items, 
+        'form': form,
+        'cart_items': cart_items,
         'total_price': total_price,
         'cart_total_quantity': cart_total_quantity
     }
-            
+
     return render(request, 'orders/create_order.html', context)
+
 
 def orders(request):
     cart = get_cart(request)
