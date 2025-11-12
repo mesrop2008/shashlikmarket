@@ -25,117 +25,69 @@ def menu(request):
     }
     return render(request, 'menu.html', context)
 
-
-def shashlik(request):
+def category_menu(request, category_slug=None):
     cart = get_cart(request)
-    shashliks = Products.objects.filter(category__exact='meat')
-    active_category = 'meat'
-        
-    for p in shashliks:
-        p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
 
-    context = {
-        'shashliks': shashliks,
-        'active_category': active_category,
-        'cart': cart
+    categories = {
+        'shashlik': {
+            'db_filter': 'meat',
+            'template_var': 'shashliks',
+            'template': 'menu/shashlik.html',
+            'active': 'meat'
+        },
+        'kebab': {
+            'db_filter': 'kebab',
+            'template_var': 'kebabs',
+            'template': 'menu/kebab.html',
+            'active': 'kebab'
+        },
+        'set': {
+            'db_filter': 'set',
+            'template_var': 'sets',
+            'template': 'menu/set.html',
+            'active': 'sets'
+        },
+        'garnir': {
+            'db_filter': 'garnish',
+            'template_var': 'garnirs',
+            'template': 'menu/garnir.html',
+            'active': 'garnirs'
+        },
+        'fish': {
+            'db_filter': 'fish',
+            'template_var': 'fishes',
+            'template': 'menu/fish.html',
+            'active': 'fishes'
+        },
+        'drinks': {
+            'db_filter': 'drinks',
+            'template_var': 'drinks',
+            'template': 'menu/drinks.html',
+            'active': 'drinks'
+        },
+        'souces': {
+              'db_filter': 'sauce',
+              'template_var': 'souces',
+              'template': 'menu/souces.html',
+              'active': 'souces'
+          }
     }
-    return render(request, 'menu/shashlik.html', context)
-
-
-def kebab(request):
-    cart = get_cart(request)
-    kebabs = Products.objects.filter(category__exact='kebab')
-    active_category = 'kebab'
+    if category_slug not in categories:
+        return menu(request)
     
-    for p in kebabs:
-        p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
+    config = categories[category_slug]
+    products = Products.objects.filter(category__exact=config['db_filter'])
 
-    context = {
-        'kebabs': kebabs,
-        'active_category': active_category,
-        'cart': cart
-    }
-    return render(request, 'menu/kebab.html', context)
-
-
-def sets(request):
-    cart = get_cart(request)
-    sets_qs = Products.objects.filter(category__exact='set')
-    active_category = 'sets'
-        
-    for p in sets_qs:
-        p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
-
-    context = {
-        'sets': sets_qs,
-        'active_category': active_category,
-        'cart': cart
-    }
-    return render(request, 'menu/set.html', context)
-
-
-def garnir(request):
-    cart = get_cart(request)
-    garnirs = Products.objects.filter(category__exact='garnish')
-    active_category = 'garnirs'
-        
-    for p in garnirs:
-        p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
-
-    context = {
-        'garnirs': garnirs,
-        'active_category': active_category,
-        'cart': cart
-    }
-    return render(request, 'menu/garnir.html', context)
-
-
-def fish(request):
-    cart = get_cart(request)
-    fishes = Products.objects.filter(category__exact='fish')
-    active_category = 'fishes'
+    for p in products:
+       p.quantity =  cart.get(str(p.id), {}).get('quantity', 0)
     
-    for p in fishes:
-        p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
-
     context = {
-        'fishes': fishes,
-        'active_category': active_category,
+        config['template_var']: products,
+        'active_category': config['active'],
         'cart': cart
     }
-    return render(request, 'menu/fish.html', context)
 
-
-def drinks(request):
-    cart = get_cart(request)
-    drinks_qs = Products.objects.filter(category__exact='drinks')
-    active_category = 'drinks'
-       
-    for p in drinks_qs:
-        p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
-
-    context = {
-        'drinks': drinks_qs,
-        'active_category': active_category,
-        'cart': cart
-    }
-    return render(request, 'menu/drinks.html', context)
-
-
-def souces(request):
-    cart = get_cart(request)
-    souces_qs = Products.objects.filter(category__exact='sauce')
-    active_category = 'souces'
-        
-    for p in souces_qs:
-        p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
-
-    context = {
-        'souces': souces_qs,
-        'active_category': active_category,
-        'cart': cart
-    }
-    return render(request, 'menu/souces.html', context)
+    return render(request, config['template'], context)
 
 
 @require_GET
