@@ -22,13 +22,13 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('menu/', menu, name='menu'),
-     path('menu/shashlik/', category_menu, {'category_slug': 'shashlik'}, name='shashlik'),
+    path('menu/shashlik/', category_menu, {'category_slug': 'shashlik'}, name='shashlik'),
     path('menu/kebab/', category_menu, {'category_slug': 'kebab'}, name='kebab'),
     path('menu/sets/', category_menu, {'category_slug': 'sets'}, name='sets'),
     path('menu/garnir/', category_menu, {'category_slug': 'garnir'}, name='garnir'),
     path('menu/fish/', category_menu, {'category_slug': 'fish'}, name='fish'),
     path('menu/drinks/', category_menu, {'category_slug': 'drinks'}, name='drinks'),
-     path('menu/souces/', category_menu, {'category_slug': 'souces'}, name='souces'),
+    path('menu/souces/', category_menu, {'category_slug': 'souces'}, name='souces'),
     path('cart/', cart_detail, name='cart'),
     path('orders/', orders, name='orders'),
     path('delivery/', delivery, name='delivery'),
@@ -37,7 +37,4 @@ urlpatterns = [
     path('remove/<int:product_id>/', remove_from_cart, name = 'remove_from_cart'),
     path('removeq/<int:product_id>/', remove_quantity, name = 'remove_quantity'),
     path('create_order/', create_order, name='create_order'),
-
-    
-
 ]
