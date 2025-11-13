@@ -41,14 +41,14 @@ def category_menu(request, category_slug=None):
             'template': 'menu/kebab.html',
             'active': 'kebab'
         },
-        'sets': {
+        'set': {
             'db_filter': 'set',
             'template_var': 'sets',
             'template': 'menu/set.html',
             'active': 'sets'
         },
         'garnir': {
-            'db_filter': 'garnish',
+            'db_filter': 'garnir',
             'template_var': 'garnirs',
             'template': 'menu/garnir.html',
             'active': 'garnirs'

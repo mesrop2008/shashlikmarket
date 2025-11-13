@@ -8,3 +8,4 @@ env/
 /staticfiles/
 media/
 */migrations/
+.env
