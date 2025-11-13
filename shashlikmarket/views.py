@@ -41,14 +41,14 @@ def category_menu(request, category_slug=None):
             'template': 'menu/kebab.html',
             'active': 'kebab'
         },
-        'set': {
+        'sets': {  
             'db_filter': 'set',
             'template_var': 'sets',
             'template': 'menu/set.html',
             'active': 'sets'
         },
         'garnir': {
-            'db_filter': 'garnir',
+            'db_filter': 'garnish',
             'template_var': 'garnirs',
             'template': 'menu/garnir.html',
             'active': 'garnirs'
@@ -66,20 +66,21 @@ def category_menu(request, category_slug=None):
             'active': 'drinks'
         },
         'souces': {
-              'db_filter': 'sauce',
-              'template_var': 'souces',
-              'template': 'menu/souces.html',
-              'active': 'souces'
-          }
+            'db_filter': 'sauce',
+            'template_var': 'souces',
+            'template': 'menu/souces.html',
+            'active': 'souces'
+        }
     }
-    if category_slug not in categories:
+
+    if not category_slug or category_slug not in categories:
         return menu(request)
     
     config = categories[category_slug]
     products = Products.objects.filter(category__exact=config['db_filter'])
 
     for p in products:
-       p.quantity =  cart.get(str(p.id), {}).get('quantity', 0)
+        p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
     
     context = {
         config['template_var']: products,
@@ -88,6 +89,7 @@ def category_menu(request, category_slug=None):
     }
 
     return render(request, config['template'], context)
+
 
 
 @require_GET
