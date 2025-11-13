@@ -1,4 +1,3 @@
-
 from shashlikmarket.utils import get_cart
 
 def menu_urls(request):
@@ -11,8 +10,8 @@ def menu_urls(request):
 
 def cart_context(request):
     cart = get_cart(request)
-    cart_items_count = sum(item['quantity'] for item in cart.values())
+    cart_total_quantity = sum(item.get('quantity', 0) for item in cart.values())
+
     return {
-        'cart_items_count': cart_items_count,
-        'cart_total': cart_items_count  
+        'cart_total_quantity': cart_total_quantity
     }
