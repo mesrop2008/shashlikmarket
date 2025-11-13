@@ -13,14 +13,13 @@
   {% load static %}
   {% block content %}
   <div class="max-w-7xl mx-auto px-4 py-12">
-    <!-- Заголовок -->
-    <div class="text-center mb-12">
+      <div class="text-center mb-12">
       <h1 class="text-4xl font-bold text-gray-900 mb-4">Наше меню</h1>
       <p class="text-xl text-gray-600 max-w-2xl mx-auto">Выберите лучшие шашлыки, приготовленные на настоящих углях из
         отборного мяса</p>
     </div>
 
-    <!-- Категории -->
+    <!-- Categories -->
     <div class="grid grid-cols-2 md:grid-cols-8 gap-2 mb-8 text-center">
       <a href="{% url 'menu' %}" class="py-2 px-4 rounded-lg font-semibold inline-block {% if active_category == 'all' %}
               bg-orange-100
@@ -29,49 +28,49 @@
             {% endif %}">
         🍽️ Всё меню
       </a>
-      <a href="{% url 'shashlik' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'meat' %}
+      <a href="{% url 'category_menu' 'shashlik' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'meat' %}
               bg-orange-100 font-semibold
             {% else %}
               bg-gray-100 hover:bg-orange-100
             {% endif %}">
         🍖 Шашлыки
       </a>
-      <a href="{% url 'kebab' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'kebab' %}
+      <a href="{% url 'category_menu' 'kebab' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'kebab' %}
               bg-orange-100 font-semibold
             {% else %}
               bg-gray-100 hover:bg-orange-100
             {% endif %}">
         🍢 Люля-кебаб
       </a>
-      <a href="{% url 'sets' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'sets' %}
+      <a href="{% url 'category_menu' 'sets' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'sets' %}
               bg-orange-100 font-semibold
             {% else %}
               bg-gray-100 hover:bg-orange-100
             {% endif %}">
         🥗 Сеты
       </a>
-      <a href="{% url 'garnirs' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'garnirs' %}
+      <a href="{% url 'category_menu' 'garnir' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'garnirs' %}
               bg-orange-100 font-semibold
             {% else %}
               bg-gray-100 hover:bg-orange-100
             {% endif %}">
         🍚 Гарниры
       </a>
-      <a href="{% url 'fishes' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'fishes' %}
+      <a href="{% url 'category_menu' 'fish' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'fishes' %}
               bg-orange-100 font-semibold
             {% else %}
               bg-gray-100 hover:bg-orange-100
             {% endif %}">
         🐟 Рыба
       </a>
-      <a href="{% url 'drinks' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'drinks' %}
+      <a href="{% url 'category_menu' 'drinks' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'drinks' %}
               bg-orange-100 font-semibold
             {% else %}
               bg-gray-100 hover:bg-orange-100
             {% endif %}">
         🥤 Напитки
       </a>
-      <a href="{% url 'souces' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'souces' %}
+      <a href="{% url 'category_menu' 'souces' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'souces' %}
               bg-orange-100 font-semibold
             {% else %}
               bg-gray-100 hover:bg-orange-100
@@ -80,7 +79,6 @@
       </a>
     </div>
 
-    <!-- Сетка товаров -->
     {% if products %}
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       {% for product in products %}
@@ -108,7 +106,6 @@
             <div class="flex items-center gap-1 text-sm text-gray-500">🕒 25–30 мин</div>
           </div>
 
-          <!-- Блок кнопок корзины -->
           <div class="cart-controls">
             {% if product.id|stringformat:"s" in cart %}
             <div
@@ -133,7 +130,6 @@
       {% endfor %}
     </div>
     {% else %}
-    <!-- Если товаров нет -->
     <div class="text-center py-12 col-span-full">
       <div class="text-6xl mb-4">🍽️</div>
       <h3 class="text-xl font-semibold text-gray-900 mb-2">В этой категории пока нет блюд</h3>

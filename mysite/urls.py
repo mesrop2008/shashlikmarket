@@ -22,13 +22,7 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('', home, name='home'),
     path('menu/', menu, name='menu'),
-    path('menu/shashlik', shashlik, name='shashlik'),
-    path('menu/kebab', kebab, name='kebab'),
-    path('menu/sets', sets, name='sets'),
-    path('menu/garnir', garnir, name='garnirs'),
-    path('menu/fish', fish, name='fishes'),
-    path('menu/drinks', drinks, name='drinks'),
-    path('menu/souces', souces, name='souces'),
+    path('menu/<slug:category_slug>/', category_menu, name='category_menu'),
     path('cart/', cart_detail, name='cart'),
     path('orders/', orders, name='orders'),
     path('delivery/', delivery, name='delivery'),
@@ -37,7 +31,4 @@ urlpatterns = [
     path('remove/<int:product_id>/', remove_from_cart, name = 'remove_from_cart'),
     path('removeq/<int:product_id>/', remove_quantity, name = 'remove_quantity'),
     path('create_order/', create_order, name='create_order'),
-
-    
-
 ]

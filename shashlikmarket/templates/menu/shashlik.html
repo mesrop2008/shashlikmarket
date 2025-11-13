@@ -23,39 +23,63 @@
 
         <!-- Categories -->
         <div class="grid grid-cols-2 md:grid-cols-8 gap-2 mb-8 text-center">
-            <a href="{% url 'menu' %}"
-                class="py-2 px-4 rounded-lg font-semibold inline-block {% if active_category == 'all' %}bg-orange-100{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-                🍽️ Всё меню
-            </a>
-            <a href="{% url 'shashlik' %}"
-                class="py-2 px-4 rounded-lg inline-block {% if active_category == 'meat' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-                🍖 Шашлыки
-            </a>
-            <a href="{% url 'kebab' %}"
-                class="py-2 px-4 rounded-lg inline-block {% if active_category == 'kebab' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-                🍢 Люля-кебаб
-            </a>
-            <a href="{% url 'sets' %}"
-                class="py-2 px-4 rounded-lg inline-block {% if active_category == 'sets' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-                🥗 Сеты
-            </a>
-            <a href="{% url 'garnirs' %}"
-                class="py-2 px-4 rounded-lg inline-block {% if active_category == 'garnirs' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-                🍚 Гарниры
-            </a>
-            <a href="{% url 'fishes' %}"
-                class="py-2 px-4 rounded-lg inline-block {% if active_category == 'fishes' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-                🐟 Рыба
-            </a>
-            <a href="{% url 'drinks' %}"
-                class="py-2 px-4 rounded-lg inline-block {% if active_category == 'drinks' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-                🥤 Напитки
-            </a>
-            <a href="{% url 'souces' %}"
-                class="py-2 px-4 rounded-lg inline-block {% if active_category == 'souces' %}bg-orange-100 font-semibold{% else %}bg-gray-100 hover:bg-orange-100{% endif %}">
-                🧂 Соусы
-            </a>
-        </div>
+      <a href="{% url 'menu' %}" class="py-2 px-4 rounded-lg font-semibold inline-block {% if active_category == 'all' %}
+              bg-orange-100
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+        🍽️ Всё меню
+      </a>
+      <a href="{% url 'category_menu' 'shashlik' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'meat' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+        🍖 Шашлыки
+      </a>
+      <a href="{% url 'category_menu' 'kebab' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'kebab' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+        🍢 Люля-кебаб
+      </a>
+      <a href="{% url 'category_menu' 'sets' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'sets' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+        🥗 Сеты
+      </a>
+      <a href="{% url 'category_menu' 'garnir' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'garnirs' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+        🍚 Гарниры
+      </a>
+      <a href="{% url 'category_menu' 'fish' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'fishes' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+        🐟 Рыба
+      </a>
+      <a href="{% url 'category_menu' 'drinks' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'drinks' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+        🥤 Напитки
+      </a>
+      <a href="{% url 'category_menu' 'sauces' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'sauces' %}
+              bg-orange-100 font-semibold
+            {% else %}
+              bg-gray-100 hover:bg-orange-100
+            {% endif %}">
+        🧂 Соусы
+      </a>
+    </div>
 
 
         <!-- Menu Items Grid -->
@@ -74,7 +98,7 @@
         <div class="p-6">
           <div class="flex items-start justify-between mb-2">
             <h3 class="text-xl font-bold text-gray-900">{{ product.name }}</h3>
-            <span class="px-2 py-1 text-sm bg-gray-100 rounded">{{ product.weight }}г</span>
+            <span class="px-2 py-1 text-sm bg-gray-100 rounded">{{ product.weight_display }}</span>
           </div>
 
           <p class="text-gray-600 mb-4 leading-relaxed">{{ product.description }}</p>
