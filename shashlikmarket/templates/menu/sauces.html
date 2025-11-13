@@ -72,7 +72,7 @@
             {% endif %}">
         🥤 Напитки
       </a>
-      <a href="{% url 'category_menu' 'souces' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'souces' %}
+      <a href="{% url 'category_menu' 'sauces' %}" class="py-2 px-4 rounded-lg inline-block {% if active_category == 'sauces' %}
               bg-orange-100 font-semibold
             {% else %}
               bg-gray-100 hover:bg-orange-100
@@ -86,7 +86,7 @@
     <!-- Menu Items Grid -->
     <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
       <!-- Card example -->
-      {% for product in souces %}
+      {% for product in sauces %}
       <div
         class="group product-card hover:shadow-xl transition-all duration-300 overflow-hidden border-0 shadow-lg rounded-lg"
         data-product-id="{{ product.id }}">

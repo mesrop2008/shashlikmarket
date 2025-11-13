@@ -65,11 +65,11 @@ def category_menu(request, category_slug=None):
             'template': 'menu/drinks.html',
             'active': 'drinks'
         },
-        'souces': {
+        'sauces': {
             'db_filter': 'sauce',
-            'template_var': 'souces',
-            'template': 'menu/souces.html',
-            'active': 'souces'
+            'template_var': 'sauces',
+            'template': 'menu/sauces.html',
+            'active': 'sauces'
         }
     }
 
