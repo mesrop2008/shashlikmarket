@@ -312,7 +312,7 @@ def orders(request):
                 'pay_type': order.get_pay_type_display(),
                 'status': order.status,
                 'status_display': order.get_status_display(),
-                'created_at': order.created_at.strftime('%d.%m.%Y в %H:%M'),
+                'created_at': order.created_at,
                 'total_price': order.total_price,
                 'items': order.items.all()  
             }
