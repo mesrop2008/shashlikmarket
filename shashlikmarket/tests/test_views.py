@@ -1,6 +1,6 @@
 import pytest
 from django.test import RequestFactory
-from shashlikmarket.views import menu, category_menu, create_order
+from shashlikmarket.views import menu, category_menu, create_order, orders
 from shashlikmarket.models import Products, OrderItem, Order
 from shashlikmarket.utils import clean_cart
 from decimal import Decimal
@@ -153,3 +153,41 @@ class TestCreateOrder:
         assert item.quantity == 2
         assert request.session["cart"] == {}
         assert order.id in request.session["user_orders"]
+
+@pytest.mark.django_db
+def test_orders_view_shows_only_active_orders():
+    client = Client()
+    order1 = Order.objects.create(
+        customer_name="Иван",
+        customer_phone="89500903533",
+        delivery_type="delivery",
+        customer_address="ул. Пушкина, д.1",
+        pay_type="cash",
+        total_price=500,
+        status="pending"
+    )
+    order2 = Order.objects.create(
+        customer_name="Петр",
+        customer_phone="89086508038",
+        delivery_type="pickup",
+        customer_address="ул. Лермонтова, д.2",
+        pay_type="card",
+        total_price=300,
+        status="completed"
+    )
+
+    product = Products.objects.create(name="Шашлык", price=Decimal("250"), weight=100)
+    OrderItem.objects.create(order=order1, product=product, quantity=2)
+    OrderItem.objects.create(order=order2, product=product, quantity=1)
+
+    session = client.session
+    session['user_orders'] = [order1.id, order2.id]
+    session.save()
+
+    response = client.get('/orders/')  
+    assert response.status_code == 200
+    orders_in_context = response.context['orders']
+
+    assert len(orders_in_context) == 1
+    assert orders_in_context[0]['id'] == order1.id
+    assert orders_in_context[0]['status'] == "pending"
