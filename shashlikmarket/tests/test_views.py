@@ -1,11 +1,12 @@
 import pytest
 from django.test import RequestFactory
-from shashlikmarket.views import menu, category_menu
-from shashlikmarket.models import Products
+from shashlikmarket.views import menu, category_menu, create_order
+from shashlikmarket.models import Products, OrderItem, Order
 from shashlikmarket.utils import clean_cart
 from decimal import Decimal
 from django.test import Client
 from django.urls import reverse
+from django.http import QueryDict
 
 class DummySession(dict):
     """A simple dict-based mock of Django session with a 'modified' attribute for testing."""
@@ -108,5 +109,47 @@ class TestShowCategories:
         result = category_menu(request, category_slug='None')
         assert result == 'menu called'
         
+class TestCreateOrder:
+    @pytest.mark.django_db
+    def test_create_order_get_render_form(self, request_with_session):
+        product = Products.objects.create(name="Шашлык", price=Decimal("250"), weight=150)
+        request = request_with_session
+        request.session["cart"] = {str(product.id): {"quantity": 2, "name": product.name, "price": str(product.price)}}
+        request.method = "GET"
 
+        response = create_order(request)
+        assert response.status_code == 200
+        assert hasattr(response, "content")
 
+    @pytest.mark.django_db
+    def test_create_order_post_creates_order(self, request_with_session):
+        product = Products.objects.create(name="Шашлык", price=Decimal("250"), weight=150)
+        request = request_with_session
+        request.session["cart"] = {str(product.id): {"quantity": 2, "name": product.name, "price": str(product.price)}}
+        request.method = "POST"
+
+        post = QueryDict('', mutable=True)
+        post.update({
+            'customer_name': 'Иван',
+            'customer_phone': '+79500903533',
+            'delivery_type': 'delivery',
+            'customer_address': 'ул. Пушкина, д.1',
+            'pay_type': 'cash'
+        })
+        request.POST = post
+
+        response = create_order(request)
+        assert response.status_code == 302
+
+        order = Order.objects.first()
+        assert order is not None
+        assert order.customer_name == 'Иван'
+        assert order.customer_phone == '+79500903533'
+        assert order.total_price == product.price * 2
+
+        item = OrderItem.objects.first()
+        assert item is not None
+        assert item.product == product
+        assert item.quantity == 2
+        assert request.session["cart"] == {}
+        assert order.id in request.session["user_orders"]
