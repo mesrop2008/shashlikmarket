@@ -285,6 +285,7 @@ function showNotification(message, type = 'success') {
 }
 
 document.addEventListener('DOMContentLoaded', function() {
+
     document.addEventListener('click', function(e) {
         const addButton = e.target.closest('.add-to-cart-button');
         if (addButton) {
@@ -308,11 +309,13 @@ document.addEventListener('DOMContentLoaded', function() {
                 return response.json();
             })
             .then(data => {
-                if (data.success) {
-                    updateCartCounter(data.cart_total_quantity);
-                    updateProductUI(data.product_id, data.product_quantity);
-                    showNotification(data.message, 'success');
+                if (!data.success) {
+                    showNotification(data.message, 'error');
+                    return;
                 }
+                updateCartCounter(data.cart_total_quantity);
+                updateProductUI(data.product_id, data.product_quantity);
+                showNotification(data.message, 'success');
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -335,19 +338,16 @@ document.addEventListener('DOMContentLoaded', function() {
             
             fetch(`/add/${productId}/`, {
                 method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    updateCartCounter(data.cart_total_quantity);
-                    updateProductUI(data.product_id, data.product_quantity);
+                if (!data.success) {
+                    showNotification(data.message, 'error');
+                    return;
                 }
+                updateCartCounter(data.cart_total_quantity);
+                updateProductUI(data.product_id, data.product_quantity);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -366,19 +366,16 @@ document.addEventListener('DOMContentLoaded', function() {
             
             fetch(`/removeq/${productId}/`, {
                 method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
-            .then(response => {
-                if (!response.ok) throw new Error('Network response was not ok');
-                return response.json();
-            })
+            .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    updateCartCounter(data.cart_total_quantity);
-                    updateProductUI(data.product_id, data.product_quantity);
+                if (!data.success) {
+                    showNotification(data.message, 'error');
+                    return;
                 }
+                updateCartCounter(data.cart_total_quantity);
+                updateProductUI(data.product_id, data.product_quantity);
             })
             .catch(error => {
                 console.error('Error:', error);
@@ -397,31 +394,27 @@ document.addEventListener('DOMContentLoaded', function() {
             
             fetch(`/add/${productId}/`, {
                 method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    updateCartCounter(data.cart_total_quantity);
-                    
-                    const cartItem = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
-                    if (cartItem) {
-                        const quantitySpan = cartItem.querySelector('.product-quantity');
-                        const subtotalSpan = cartItem.querySelector('.product-subtotal');
-                        const price = parseFloat(cartItem.dataset.price);
-                        
-                        if (quantitySpan) quantitySpan.textContent = data.product_quantity;
-                        if (subtotalSpan) subtotalSpan.textContent = (price * data.product_quantity).toFixed(0) + '₽';
-                    }
-                    
-                    updateCartTotal(data.cart_total);
+                if (!data.success) {
+                    showNotification(data.message, 'error');
+                    return;
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                window.location.href = cartAddBtn.href;
+                updateCartCounter(data.cart_total_quantity);
+                
+                const cartItem = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
+                if (cartItem) {
+                    const quantitySpan = cartItem.querySelector('.product-quantity');
+                    const subtotalSpan = cartItem.querySelector('.product-subtotal');
+                    const price = parseFloat(cartItem.dataset.price);
+                    
+                    if (quantitySpan) quantitySpan.textContent = data.product_quantity;
+                    if (subtotalSpan) subtotalSpan.textContent = (price * data.product_quantity).toFixed(0) + '₽';
+                }
+                
+                updateCartTotal(data.cart_total);
             });
         }
     });
@@ -435,36 +428,32 @@ document.addEventListener('DOMContentLoaded', function() {
             
             fetch(`/removeq/${productId}/`, {
                 method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    updateCartCounter(data.cart_total_quantity);
-                    
-                    if (data.product_quantity > 0) {
-                        const cartItem = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
-                        if (cartItem) {
-                            const quantitySpan = cartItem.querySelector('.product-quantity');
-                            const subtotalSpan = cartItem.querySelector('.product-subtotal');
-                            const price = parseFloat(cartItem.dataset.price);
-                            
-                            if (quantitySpan) quantitySpan.textContent = data.product_quantity;
-                            if (subtotalSpan) subtotalSpan.textContent = (price * data.product_quantity).toFixed(0) + '₽';
-                        }
-                    } else {
-                        removeCartItem(productId);
-                    }
-                    
-                    updateCartTotal(data.cart_total);
-                    checkEmptyCart();
+                if (!data.success) {
+                    showNotification(data.message, 'error');
+                    return;
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                window.location.href = cartRemoveBtn.href;
+                updateCartCounter(data.cart_total_quantity);
+                
+                if (data.product_quantity > 0) {
+                    const cartItem = document.querySelector(`.cart-item[data-product-id="${productId}"]`);
+                    if (cartItem) {
+                        const quantitySpan = cartItem.querySelector('.product-quantity');
+                        const subtotalSpan = cartItem.querySelector('.product-subtotal');
+                        const price = parseFloat(cartItem.dataset.price);
+                        
+                        if (quantitySpan) quantitySpan.textContent = data.product_quantity;
+                        if (subtotalSpan) subtotalSpan.textContent = (price * data.product_quantity).toFixed(0) + '₽';
+                    }
+                } else {
+                    removeCartItem(productId);
+                }
+                
+                updateCartTotal(data.cart_total);
+                checkEmptyCart();
             });
         }
     });
@@ -478,26 +467,23 @@ document.addEventListener('DOMContentLoaded', function() {
             
             fetch(`/remove/${productId}/`, {
                 method: 'GET',
-                headers: {
-                    'X-Requested-With': 'XMLHttpRequest',
-                }
+                headers: { 'X-Requested-With': 'XMLHttpRequest' }
             })
             .then(response => response.json())
             .then(data => {
-                if (data.success) {
-                    updateCartCounter(data.cart_total_quantity);
-                    removeCartItem(productId);
-                    updateCartTotal(data.cart_total);
-                    checkEmptyCart();
+                if (!data.success) {
+                    showNotification(data.message, 'error');
+                    return;
                 }
-            })
-            .catch(error => {
-                console.error('Error:', error);
-                window.location.href = removeItemBtn.href;
+                updateCartCounter(data.cart_total_quantity);
+                removeCartItem(productId);
+                updateCartTotal(data.cart_total);
+                checkEmptyCart();
             });
         }
     });
 });
+
 </script>
 </body>
 

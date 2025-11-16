@@ -77,7 +77,8 @@ def category_menu(request, category_slug=None):
         return menu(request)
     
     config = categories[category_slug]
-    products = Products.objects.filter(category__exact=config['db_filter'])
+    products = Products.objects.filter(category__exact=config['db_filter'],
+                                       is_available=True)
 
     for p in products:
         p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
@@ -95,8 +96,14 @@ def category_menu(request, category_slug=None):
 @require_GET
 def add_to_cart(request, product_id):
     product = get_object_or_404(Products, id=product_id)
-    cart = get_cart(request)
+        
+    if not product.is_in_stock():
+      return JsonResponse({
+          'success': False,
+          'message': 'Товар временно недоступен'
+      })
     
+    cart = get_cart(request)
     image_url = product.image.url if product.image else ''
 
     if str(product.id) not in cart:
@@ -111,11 +118,10 @@ def add_to_cart(request, product_id):
     
     save_cart(request, cart)
     
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        total_quantity = sum(item['quantity'] for item in cart.values())
-        cart_total = sum(float(item['price']) * item['quantity'] for item in cart.values())
-        
-        return JsonResponse({
+    total_quantity = sum(item['quantity'] for item in cart.values())
+    cart_total = sum(float(item['price']) * item['quantity'] for item in cart.values())
+
+    return JsonResponse({
             'success': True,
             'message': f'{product.name} добавлен в корзину',
             'cart_total_quantity': total_quantity,
@@ -124,9 +130,6 @@ def add_to_cart(request, product_id):
             'cart_total': cart_total
         })
     
-    return redirect('cart')
-
-
 @require_GET
 def remove_quantity(request, product_id):
     cart = get_cart(request)
