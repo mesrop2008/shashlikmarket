@@ -1,7 +1,3 @@
-"""
-Django settings for mysite project.
-"""
-
 from pathlib import Path
 import os
 from dotenv import load_dotenv
@@ -19,13 +15,13 @@ if not SECRET_KEY:
 DEBUG = os.getenv("DEBUG", "False").lower() in ("true", "1", "yes")
 
 if not DEBUG:
-      SECURE_SSL_REDIRECT = True
-      SESSION_COOKIE_SECURE = True
-      CSRF_COOKIE_SECURE = True
-      SECURE_HSTS_SECONDS = 31536000
-      SECURE_BROWSER_XSS_FILTER = True
-      SECURE_CONTENT_TYPE_NOSNIFF = True
-      X_FRAME_OPTIONS = 'DENY'
+    SECURE_SSL_REDIRECT = True
+    SESSION_COOKIE_SECURE = True
+    CSRF_COOKIE_SECURE = True
+    SECURE_HSTS_SECONDS = 31536000
+    SECURE_BROWSER_XSS_FILTER = True
+    SECURE_CONTENT_TYPE_NOSNIFF = True
+    X_FRAME_OPTIONS = 'DENY'
 
 ALLOWED_HOSTS = os.getenv("ALLOWED_HOSTS", "").split(",") if os.getenv("ALLOWED_HOSTS") else []
 
@@ -53,7 +49,7 @@ MIDDLEWARE = [
 
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SAMESITE = 'Lax'
-SESSION_COOKIE_AGE = 1209600  # 2 weeks
+SESSION_COOKIE_AGE = 1209600
 
 ROOT_URLCONF = 'mysite.urls'
 
@@ -75,7 +71,6 @@ TEMPLATES = [
 ]
 
 WSGI_APPLICATION = 'mysite.wsgi.application'
-
 
 DATABASES = {
     'default': {
@@ -112,21 +107,28 @@ AUTH_PASSWORD_VALIDATORS = [
     {'NAME': 'django.contrib.auth.password_validation.NumericPasswordValidator'},
 ]
 
-
-LANGUAGE_CODE = 'ru-ru'
+LANGUAGE_CODE = 'ru'
 TIME_ZONE = 'Asia/Irkutsk'
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
+
+LANGUAGES = [
+    ('ru', 'Russian'),
+    ('en', 'English'),
+]
 
 DATE_FORMAT = 'd.m.Y'
 DATETIME_FORMAT = 'd.m.Y H:i'
 SHORT_DATE_FORMAT = 'd.m.Y'
 SHORT_DATETIME_FORMAT = 'd.m.Y H:i'
+
 FIRST_DAY_OF_WEEK = 1
+
+LOCALE_PATHS = [
+    BASE_DIR / 'locale',
+]
 
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'staticfiles'
-
 
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

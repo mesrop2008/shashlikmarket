@@ -5,7 +5,9 @@ venv/
 env/
 *.sqlite3
 *.log
-/staticfiles/
+staticfiles/
 media/
-*/migrations/
+**/migrations/
 .env
+.vscode/
+.idea/
