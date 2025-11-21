@@ -156,7 +156,7 @@ def remove_quantity(request, product_id):
             'cart_total': cart_total
         })
     
-    return redirect('cart')
+   
 
 
 @require_GET
@@ -182,7 +182,7 @@ def remove_from_cart(request, product_id):
             'message': f'{product_name} удален из корзины'
         })
     
-    return redirect('cart')
+   
 
 
 def cart_detail(request):
