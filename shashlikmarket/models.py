@@ -28,7 +28,7 @@ class Products(models.Model):
             
     class Meta:
         db_table = 'products'
-        managed = False  # можно оставить False, если таблица уже есть
+        managed = False  
         indexes = [
             models.Index(fields=['category'], name='idx_product_category'),
         ]
