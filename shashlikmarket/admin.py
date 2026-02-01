@@ -38,7 +38,6 @@ class OrderItemInline(admin.TabularInline):
 
 @admin.register(Order)
 class OrderAdmin(admin.ModelAdmin):
-    # Поля в списке заказов (УБИРАЕМ 'actions' из list_display)
     list_display = [
         'id', 
         'customer_name', 
@@ -47,7 +46,7 @@ class OrderAdmin(admin.ModelAdmin):
         'get_status', 
         'total_price', 
         'created_at',
-        'quick_actions'  # ⚠️ ПЕРЕИМЕНОВАЛ 'actions' → 'quick_actions'
+        'quick_actions' 
     ]
     
     list_filter = [
@@ -82,9 +81,7 @@ class OrderAdmin(admin.ModelAdmin):
     
     def has_delete_permission(self, request, obj=None):
         return False
-    
-    # КАСТОМНЫЕ МЕТОДЫ:
-    
+
     def get_status(self, obj):
         """Показывает статус с цветом"""
         colors = {
@@ -112,7 +109,7 @@ class OrderAdmin(admin.ModelAdmin):
         return format_html("<br>".join(items))
     get_items_display.short_description = "Состав заказа"
     
-    def quick_actions(self, obj):  # ⚠️ ПЕРЕИМЕНОВАЛ МЕТОД
+    def quick_actions(self, obj): 
         """Кнопки для быстрой смены статуса"""
         if obj.status == 'pending':
             return format_html('<span style="color: gray;">В обработке</span>')
@@ -122,9 +119,8 @@ class OrderAdmin(admin.ModelAdmin):
             return format_html('<span style="color: green;">✅ Готов к выдаче</span>')
         else:
             return format_html('<span style="color: gray;">✅ Завершен</span>')
-    quick_actions.short_description = "Текущий статус"  # ⚠️ И здесь тоже
-    
-    # УБИРАЕМ actions из fieldsets если они там были
+    quick_actions.short_description = "Текущий статус"  
+
     fieldsets = (
         ('Основная информация', {
             'fields': (
@@ -141,7 +137,7 @@ class OrderAdmin(admin.ModelAdmin):
                 'delivery_type',
                 'customer_address', 
                 'pay_type',
-                'status'  # Единственное редактируемое поле
+                'status'  
             )
         }),
     )
