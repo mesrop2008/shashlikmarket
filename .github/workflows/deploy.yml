@@ -16,8 +16,8 @@ jobs:
       - name: Deploy via FTP
         uses: SamKirkland/FTP-Deploy-Action@v4.3.5
         with:
-          server: ${{ secrets.FTP_HOST }}
-          username: ${{ secrets.FTP_USER }}
+          server: tehmin52.beget.tech
+          username: tehmin52_dep
           password: ${{ secrets.FTP_PASSWORD }}
           local-dir: ./
           server-dir: /shashlikmarket/
