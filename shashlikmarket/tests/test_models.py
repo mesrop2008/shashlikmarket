@@ -11,7 +11,8 @@ class TestProductsModel:
             category="meat"
         )
         assert str(product) == "Шашлык из свинины"
-    
+        assert product.is_in_stock()
+
     def test_product_creation(self):
         product = Products.objects.create(
             name = "Кебаб",
@@ -23,6 +24,15 @@ class TestProductsModel:
         assert product.id is not None
         assert product.price == Decimal("350")
 
+    def test_product_unavailable(self):
+        product = Products.objects.create(
+            name="Шашлык",
+            price=Decimal("400.00"),
+            category="Meat",
+            is_available=False
+        )
+
+        assert product.is_in_stock() is False
 @pytest.mark.django_db
 class TestOrderModel:
     def test_order_creation(self):

@@ -15,6 +15,16 @@ class Products(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
     category = models.CharField(max_length=100, blank=True, null=True)
     image = CloudinaryField('image', blank=True, null=True)  
+
+    is_available = models.BooleanField(
+        default=True,
+        verbose_name="Доступен для заказа"
+    )
+
+    def is_in_stock(self):
+        """Check if product is available for ordering"""
+        return self.is_available
+    
     @property
     def price_display(self):
         if self.price % 1 == 0:
@@ -28,7 +38,7 @@ class Products(models.Model):
             
     class Meta:
         db_table = 'products'
-        managed = False  
+        managed = True
         indexes = [
             models.Index(fields=['category'], name='idx_product_category'),
         ]

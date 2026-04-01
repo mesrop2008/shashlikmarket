@@ -4,6 +4,7 @@ from shashlikmarket.utils import get_cart, save_cart
 from shashlikmarket.models import Products
 from shashlikmarket.views import add_to_cart, remove_quantity, remove_from_cart
 from decimal import Decimal
+import json
 
 class DummySession(dict):
     """Mock Django session with 'modified' attribute."""
@@ -41,12 +42,31 @@ class TestCartsUtilities:
         response = add_to_cart(request, product.id)
         cart = request.session.get("cart", {})
 
-        assert response.status_code == 302
         assert str(product.id) in cart
         assert cart[str(product.id)]["quantity"] == 1
         assert cart[str(product.id)]["name"] == product.name
         assert Decimal(cart[str(product.id)]["price"]) == product.price
-       
+
+        data = json.loads(response.content)
+        assert data["success"] is True
+        assert data["product_quantity"] == 1
+
+    def test_add_to_cart_unavailable_item(self, request_with_session):
+        product = Products.objects.create(
+            name="Шашлык",
+            price=Decimal("250"),
+            weight=150,
+            category='meat',
+            is_available=False
+        )
+        request = request_with_session
+
+        response = add_to_cart(request, product.id)
+        cart = request.session.get("cart", {})
+        
+        data = json.loads(response.content)
+        assert data["success"] is False
+        
     def test_add_to_cart_increases_quantity(self, request_with_session):
             product = Products.objects.create(
                 name="Шашлык",

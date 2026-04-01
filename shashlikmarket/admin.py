@@ -5,8 +5,10 @@ import math
 
 @admin.register(Products)
 class ProductAdmin(admin.ModelAdmin):
-    list_display = ['name', 'price_with_currency', 'category', 'preview']
+    list_display = ['name', 'price_with_currency', 'category', 'preview', 'is_available']
     readonly_fields = ['preview']
+    list_filter = ['category', 'is_available']
+    list_editable = ['is_available']
 
     def preview(self, obj):
         if obj.image:

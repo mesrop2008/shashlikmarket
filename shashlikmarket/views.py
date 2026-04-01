@@ -4,7 +4,7 @@ from django.views.decorators.http import require_GET
 from .models import *
 from .utils import get_cart, save_cart, clean_cart
 from .forms import OrderForm
-
+from shashlikmarket.types.cart_types import *
 
 def home(request):
     return render(request, 'index.html')
@@ -16,7 +16,8 @@ def menu(request):
     active_category = 'all'
     
     for p in products:
-        p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
+        cart_item = cart.get(str(p.id))
+        p.quantity = cart_item.quantity if cart_item else 0
             
     context = {
         'products': products,
@@ -77,10 +78,12 @@ def category_menu(request, category_slug=None):
         return menu(request)
     
     config = categories[category_slug]
-    products = Products.objects.filter(category__exact=config['db_filter'])
+    products = Products.objects.filter(category__exact=config['db_filter'],
+                                       is_available=True)
 
     for p in products:
-        p.quantity = cart.get(str(p.id), {}).get('quantity', 0)
+        cart_item = cart.get(str(p.id))
+        p.quantity = cart_item.quantity if cart_item else 0
     
     context = {
         config['template_var']: products,
@@ -95,55 +98,58 @@ def category_menu(request, category_slug=None):
 @require_GET
 def add_to_cart(request, product_id):
     product = get_object_or_404(Products, id=product_id)
-    cart = get_cart(request)
+        
+    if not product.is_in_stock():
+      return JsonResponse({
+          'success': False,
+          'message': 'Товар временно недоступен'
+      })
     
-    image_url = product.image.url if product.image else ''
+    cart = get_cart(request)
+    product_id = str(product.id)
 
     if str(product.id) not in cart:
-        cart[str(product.id)] = {
-            'quantity': 1,
-            'name': product.name,
-            'imagepath': image_url,
-            'price': str(product.price),
-        }
+        cart[str(product.id)] = CartItem(
+            quantity = 1,
+            name = product.name,
+            imagepath = product.image.url if product.image else "",
+            price =  float(product.price),
+        )
     else:
-        cart[str(product.id)]['quantity'] += 1
+        cart[product_id].quantity += 1
     
     save_cart(request, cart)
     
-    if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        total_quantity = sum(item['quantity'] for item in cart.values())
-        cart_total = sum(float(item['price']) * item['quantity'] for item in cart.values())
-        
-        return JsonResponse({
+    total_quantity = sum(item.quantity for item in cart.values())
+    cart_total = sum(float(item.price) * item.quantity for item in cart.values())
+
+    return JsonResponse({
             'success': True,
             'message': f'{product.name} добавлен в корзину',
             'cart_total_quantity': total_quantity,
-            'product_quantity': cart[str(product.id)]['quantity'],
+            'product_quantity': cart[product_id].quantity,
             'product_id': product_id,
             'cart_total': cart_total
         })
+
     
-    return redirect('cart')
-
-
 @require_GET
 def remove_quantity(request, product_id):
     cart = get_cart(request)
-    product_id_str = str(product_id)  
+    product_id = str(product_id)  
     
-    if product_id_str in cart:
-        if cart[product_id_str]["quantity"] > 1:
-            cart[product_id_str]["quantity"] -= 1
+    if product_id in cart:
+        if cart[product_id].quantity > 1:
+            cart[product_id].quantity -= 1
         else:
-            del cart[product_id_str]
+            del cart[product_id]
             
     save_cart(request, cart)
-    
+    cart_item = cart.get(product_id)
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        total_quantity = sum(item['quantity'] for item in cart.values())
-        product_quantity = cart.get(product_id_str, {}).get('quantity', 0)
-        cart_total = sum(float(item['price']) * item['quantity'] for item in cart.values())
+        total_quantity = sum(item.quantity for item in cart.values())
+        product_quantity = cart_item.quantity if cart_item else 0
+        cart_total = sum(float(item.price) * item.quantity for item in cart.values())
         
         return JsonResponse({
             'success': True,
@@ -153,23 +159,24 @@ def remove_quantity(request, product_id):
             'cart_total': cart_total
         })
     
-    return redirect('cart')
+    
+   
 
 
 @require_GET
 def remove_from_cart(request, product_id):
     cart = get_cart(request)
-    product_id_str = str(product_id)  
+    product_id = str(product_id)  
     product_name = ""
     
-    if product_id_str in cart:
-        product_name = cart[product_id_str]['name']
-        del cart[product_id_str]
+    if product_id in cart:
+        product_name = cart[product_id].name
+        del cart[product_id]
         save_cart(request, cart)
     
     if request.headers.get('x-requested-with') == 'XMLHttpRequest':
-        total_quantity = sum(item['quantity'] for item in cart.values())
-        cart_total = sum(float(item['price']) * item['quantity'] for item in cart.values())
+        total_quantity = sum(item.quantity for item in cart.values())
+        cart_total = sum(float(item.price) * item.quantity for item in cart.values())
         
         return JsonResponse({
             'success': True,
@@ -178,8 +185,9 @@ def remove_from_cart(request, product_id):
             'cart_total': cart_total,
             'message': f'{product_name} удален из корзины'
         })
-    
     return redirect('cart')
+    
+   
 
 
 def cart_detail(request):
@@ -198,7 +206,7 @@ def cart_detail(request):
         if not product:
             continue
 
-        quantity = item.get('quantity', 0)
+        quantity = item.quantity
         price = float(product.price)
         subtotal = quantity * price
         total += subtotal
@@ -209,11 +217,10 @@ def cart_detail(request):
             'price': price,
             'quantity': quantity,
             'subtotal': subtotal,
-            'imagepath': item.get('imagepath')
+            'imagepath': item.imagepath
         })
     
-    request.session['cart'] = updated_cart
-    request.session.modified = True
+    save_cart(request, cart)
    
     context = {
         'items': items,
@@ -237,7 +244,7 @@ def create_order(request):
         if not product:
             continue
 
-        quantity = item_data.get('quantity', 0)
+        quantity = item_data.quantity
         item_total = product.price * quantity
         total_price += item_total
 
@@ -245,7 +252,7 @@ def create_order(request):
             'product': product,
             'quantity': quantity,
             'total': item_total,
-            'imagepath': item_data.get('imagepath')
+            'imagepath': item_data.imagepath
         })
 
     if request.method == 'POST':
@@ -266,7 +273,7 @@ def create_order(request):
                     OrderItem.objects.create(
                         order=order,
                         product=product,
-                        quantity=item_data.get('quantity', 0)
+                        quantity=item_data.quantity if item_data else 0
                     )
 
             if 'user_orders' not in request.session:
