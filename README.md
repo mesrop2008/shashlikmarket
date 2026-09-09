@@ -11,17 +11,6 @@ It was developed as a **portfolio project** to showcase full-stack web developme
 
 ---
 
-## 🚀 Features
-
-- 🍔 Full food ordering workflow (menu, cart, orders)
-- 🧾 Admin panel for managing items and orders
-- 🗄️ PostgreSQL database
-- ☁️ Cloudinary integration for image/media storage
-- 🌍 Russian localization and timezone support
-- 🔐 Secure `.env` configuration for sensitive data
-
----
-
 ## 🛠️ Installation Guide
 
 ### 1. Clone the repository
