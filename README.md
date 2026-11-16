@@ -1,6 +1,6 @@
-# 🍢 Shashlik Market — Django Food Ordering Website
+#  Shashlik Market — Django Food Ordering Website
 
-## 🧾 About the Project
+##  About the Project
 
 **Shashlik Market** is a full-featured **food ordering website** built with **Django**.  
 It allows users to browse a restaurant’s menu, add dishes to a shopping cart, and place online food orders quickly and conveniently.  
@@ -11,7 +11,7 @@ It was developed as a **portfolio project** to showcase full-stack web developme
 
 ---
 
-## 🛠️ Installation Guide
+##  Installation Guide
 
 ### 1. Clone the repository
 ```bash
@@ -68,11 +68,11 @@ python manage.py runserver
 ```
 
 Now open your browser at:  
-👉 [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
+ [http://127.0.0.1:8000/](http://127.0.0.1:8000/)
 
 ---
 
-## 📦 Environment Variables
+##  Environment Variables
 
 | Variable | Description |
 |-----------|--------------|
@@ -84,7 +84,7 @@ Now open your browser at:
 
 ---
 
-## 🧩 Tech Stack
+##  Tech Stack
 
 - **Python 3.x**
 - **Django 5.x**
